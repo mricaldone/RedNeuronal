@@ -10,8 +10,8 @@ class Sigmoide:
 		return 1 / (1 + e ** -x)
 		
 	def derivada(self, x):
-		e = self.e ** -x
-		return e / (1 + e) ** 2
+		t = self.evaluar(x)
+		return t - t ** 2
 	
 class Tanh:
 	
@@ -33,6 +33,14 @@ class Relu:
 	
 	def derivada(self, x):
 		return 1 if x > 0 else 0
+	
+class ErrorCuadraticoMedio:
+	
+	def evaluar(self, b, a):
+		return 0.5 * (b - a) ** 2
+	
+	def derivada(self, b, a):
+		return a - b
 		
 def testFuncionSigmoide():
 	print('TEST SIGMOIDE')

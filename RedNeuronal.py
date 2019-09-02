@@ -24,7 +24,7 @@ class RedNeuronal:
 		capas = []
 		cant_entradas_de_la_capa = self.cant_entradas
 		for cant_neuronas in estructura:
-			capa_neuronal = CapaNeuronal(cant_neuronas, cant_entradas_de_la_capa, self.factiv)
+			capa_neuronal = CapaNeuronal(cant_neuronas, cant_entradas_de_la_capa, self.factiv, self.fcosto)
 			capas.append(capa_neuronal)
 			#LA PROXIMA CAPA TENDRA TANTAS ENTRADAS COMO NEURONAS EN LA CAPA ACTUAL
 			cant_entradas_de_la_capa = cant_neuronas
@@ -39,27 +39,13 @@ class RedNeuronal:
 		for capa in self.capas:
 			entradas = capa.procesar(entradas)
 		return entradas
-		#if len(entradas) != len(self.cant_entradas):
-		#	raise CantidadDeEntradasRedNeuronalError
-		#r = Matriz(len(entradas),1,entradas)
-		#for capa in self.capas:
-		#	r = capa.procesar(r)
-		#return r.getColumn(0)
 		
 	def _ultima_capa(self):
 		return self.capas[len(self.capas) - 1]
 		
 	def _generar_deltas(self, entradas, y_esperados):
-		y_obtenidos = self.procesar(entradas)
-		z_obtenidos = self._ultima_capa().obtener_vector_z()
-		deltas = []
-		for valor_obtenido, valor_esperado, z_obtenido in zip(y_obtenidos, y_esperados, z_obtenidos):
-			#DERIVADA DEL COSTE
-			dc = self.fcosto.derivada(valor_esperado, valor_obtenido)
-			#DERIVADA DE LA ACTIVACION
-			da = self.factiv.derivada(z_obtenido)
-			deltas.append(da * dc)
-		return deltas
+		self.procesar(entradas)
+		return self._ultima_capa().generar_deltas(y_esperados)
 	
 	def _propagar_deltas(self, deltas, learning_rate):
 		for capa in reversed(self.capas):
@@ -80,7 +66,7 @@ class RedNeuronal:
 		return i
 
 def testRedNeuronal():
-	LEARNING_RATE = 10
+	LEARNING_RATE = 5
 	EPOCHS = 1000
 	F = Sigmoide()
 	print('TEST RED NEURONAL')

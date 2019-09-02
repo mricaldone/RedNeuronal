@@ -66,20 +66,24 @@ class RedNeuronal:
 			#DERIVADA DE Z RESPECTO DE CADA PARAMETRO DE BIAS: UNO
 			vector_b = capa.obtener_bias()
 			
+			vector_z = capa.obtener_z()
+			
 			#print(deltas)
 			#CALCULO LOS NUEVOS BIAS
-			#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - (deltas * (dZ/db)) * LR = b - deltas * LR 
+			#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (da/dZ) * (dZ/db) * LR = b - deltas * A´(Z) * LR 
 			vector_r = Matriz(m, 1, [-learning_rate])
-			nuevo_vector_b = vector_b.sum_mat(deltas.mul_directa_mat(vector_r))
+			vector_da = vector_z.evaluar(self.factiv.derivada)
+			nuevo_vector_b = vector_b.sum_mat(deltas.mul_directa_mat(vector_da.mul_directa_mat(vector_r)))
 			capa.actualizar_bias(nuevo_vector_b)
 			#print(nuevo_vector_b)
 			
 			#CALCULO LOS NUEVOS PESOS
-			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - deltas * (dZ/dW) * LR = W - deltas * entradas * lr
+			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - deltas * (da/dZ) * (dZ/dW) * LR = W - deltas * A´(Z) * entradas * LR
 			matriz_d = deltas.expandirColumnas(n)
 			matriz_a = vector_a.expandirColumnas(m).transpuesta()
 			matriz_r = Matriz(m, n, [-learning_rate])
-			nueva_matriz_w = matriz_w.sum_mat(matriz_d.mul_directa_mat(matriz_a.mul_directa_mat(matriz_r)))
+			matriz_da = vector_z.evaluar(self.factiv.derivada).expandirColumnas(n)
+			nueva_matriz_w = matriz_w.sum_mat(matriz_d.mul_directa_mat(matriz_da.mul_directa_mat(matriz_a.mul_directa_mat(matriz_r))))
 			capa.actualizar_pesos(nueva_matriz_w)
 			#print(matriz_w)
 			#print(nueva_matriz_w)
@@ -108,8 +112,8 @@ class RedNeuronal:
 
 def testRedNeuronal():
 	print('TEST RED NEURONAL')
-	LEARNING_RATE = 0.05
-	EPOCHS = 100
+	LEARNING_RATE = 0.5
+	EPOCHS = 10000
 	F = Sigmoide()
 	print('PRUEBA COMPUERTA AND')
 	rn = RedNeuronal(2, [1], F)
@@ -142,7 +146,7 @@ def testRedNeuronal():
 	rn = RedNeuronal(2, [2,1], F)
 	datos = [[1,1],[1,0],[0,1],[0,0]]
 	esperados = [[0],[1],[1],[0]]
-	rn.entrenar_set(datos, esperados, EPOCHS, 0.5)
+	rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE)
 	print(rn.procesar([1,1]))
 	print(rn.procesar([1,0]))
 	print(rn.procesar([0,1]))

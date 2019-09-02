@@ -112,8 +112,8 @@ class RedNeuronal:
 
 def testRedNeuronal():
 	print('TEST RED NEURONAL')
-	LEARNING_RATE = 0.5
-	EPOCHS = 10000
+	LEARNING_RATE = 10
+	EPOCHS = 1000
 	F = Sigmoide()
 	print('PRUEBA COMPUERTA AND')
 	rn = RedNeuronal(2, [1], F)

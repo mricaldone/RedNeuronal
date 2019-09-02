@@ -103,6 +103,15 @@ class Matriz:
 				r.append(op)
 		return Matriz(self.dim_n(), self.dim_m(), r)
 		
+	def vector_medio(self):
+		r = []
+		for fila in self.datos:
+			sumatoria = 0
+			for e in fila:
+				sumatoria = sumatoria + e
+			r.append(sumatoria/len(fila))
+		return Matriz(self.dim_n(), 1, r)
+		
 def testMatriz():
 	m1 = Matriz(3,3,[0,1])
 	m2 = Matriz(3,3,[1,0])

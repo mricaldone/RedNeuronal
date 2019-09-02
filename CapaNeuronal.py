@@ -32,49 +32,6 @@ class CapaNeuronal:
 	def _inicializar_vector_de_bias(self):
 		#return Matriz(self.cant_neuronas, 1, [0])
 		return Matriz(self.cant_neuronas, 1, np.random.rand(self.cant_neuronas))
-	
-	#def _producto_interno(self, vect_a, vect_b):
-	#	r = 0
-	#	for a,b in zip(vect_a,vect_b):
-	#		r = r + a * b
-	#	return r
-	
-	#def _mul_mat_vec(self, mat, vect):
-	#	r = []
-	#	for v in mat:
-	#		r.append(self._producto_interno(v,vect))
-	#	return r
-		
-	#def _mul_directa_vectores(self, va, vb):
-	#	print(va,vb)
-	#	r = []
-	#	for a,b in zip(va,vb):
-	#		r.append(a * b)
-	#	return r
-		
-	#def _sum_directa_vectores(self, va, vb):
-	#	r = []
-	#	for a,b in zip(va,vb):
-	#		r.append(a + b)
-	#	return r
-	
-	#def _mul_directa_vec_escalar(self, vector, escalar):
-	#	r = []
-	#	for v in vector:
-	#		r.append(v * escalar)
-	#	return r
-	
-	#def _mul_directa_mat_vec(self, mat, vec):
-	#	r = []
-	#	for vm,v in zip(mat,vec):
-	#		r.append(self._mul_directa_vec_escalar(vm,v))
-	#	return r
-		
-	#def _evaluar_vector(self, funcion, vector):
-	#	y = []
-	#	for x in vector:
-	#		y.append(funcion(x))
-	#	return y
 			
 	def procesar(self, entradas):
 		'''
@@ -83,68 +40,33 @@ class CapaNeuronal:
 			ENTRADAS: VECTOR CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD ESPECIFICADA AL CREAR LA CAPA
 		'''
 		self.vector_x = entradas
-		#print(self.matriz_w)
-		#print(self.vector_x)
-		#print(self.matriz_w.mul_mat(self.vector_x))
-		#print(self.vector_b)
 		self.vector_z = self.matriz_w.mul_mat(self.vector_x).sum_mat(self.vector_b)
 		self.vector_y = self.vector_z.evaluar(self.factiv.evaluar)
 		return self.vector_y
 	
-	#def asignar_deltas(self, deltas):
-	#	self.vector_d = deltas
-		
-	#def calcular_deltas(self, deltas_capa_anterior, matriz_de_pesos_capa_anterior):
-		#self.deltas = deltas
-	#	w = matriz_de_pesos_capa_anterior
-		#print('W(L)\n',w)
-	#	d = deltas_capa_anterior
-		#print('d(L)\n',d)
-	#	w_d = w.transpuesta().mul_mat(d)
-		#print('WTd(L)\n',w_d)
-	#	da = self.vector_z.evaluar(self.factiv.derivada)
-		#print('da(L-1)\n',da)
-	#	w = w.transpuesta()
-	#	w_da = w.mul_mat(da)
-		#print(w_da)
-	#	aux = w_da.mul_directa_mat(da)
-		#print(aux)
-		#return w_da.mul_directa_mat(d)
-	#	return aux
-		
-		#nuevos_deltas = []
-		#for i,neurona in enumearate(self.neuronas):
-			#pesos de la siguiente capa asociados a esta neurona
-		#	pesos_asociados_a_esta_neurona = []
-		#	for j in len(W):
-		#		pesos_asociados_a_esta_neurona.append(W[j][i]) #En realidad esto es como obtener una fila de la matriz transpuesta de W
-		#	nuevo_delta = neurona.calcular_delta(deltas, pesos_asociados_a_esta_neurona)
-		#	nuevos_deltas.append(nuevo_delta)
-		#return nuevos_deltas
-		
-	#def actualizar_pesos(self, learning_rate):
-		#dim_m = self.matriz_w.dim_m()
-	#	lr = Matriz(self.vector_d.dim_n(), self.vector_d.dim_m(), [-learning_rate])
-	#	deltas = self.vector_d.mul_directa_mat(lr)
-	#	aux = self.vector_x.mul_mat(deltas.transpuesta())
-	#	self.matriz_w = self.matriz_w.sum_mat(aux.transpuesta())
-		#ACTUALIZAR BIAS
-	#	self.vector_b = self.vector_b.sum_mat(deltas)
-		#print(self.vector_b)
-	#	return
-	
 	def obtener_z(self):
 		return self.vector_z
 	
-	def obtener_matriz_de_pesos(self):
+	def obtener_pesos(self):
 		return self.matriz_w
-	
-	#NUEVAS FUNCIONES
-	
 		
+	def obtener_entradas(self):
+		return self.vector_x
 	
-	def __len__(self):
+	def obtener_bias(self):
+		return self.vector_b
+		
+	def len_entradas(self):
+		return self.cant_entradas
+		
+	def len_salidas(self):
 		return self.cant_neuronas
+		
+	def actualizar_bias(self, vector_b):
+		self.vector_b = vector_b
+	
+	def actualizar_pesos(self, matriz_w):
+		self.matriz_w = matriz_w
 
 from Funciones import *
 

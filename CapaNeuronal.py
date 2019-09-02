@@ -91,20 +91,26 @@ class CapaNeuronal:
 		self.vector_y = self.vector_z.evaluar(self.factiv.evaluar)
 		return self.vector_y
 	
-	def asignar_deltas(self, deltas):
-		self.vector_d = deltas
+	#def asignar_deltas(self, deltas):
+	#	self.vector_d = deltas
 		
-	def calcular_deltas(self, deltas_capa_anterior, matriz_de_pesos_capa_anterior):
+	#def calcular_deltas(self, deltas_capa_anterior, matriz_de_pesos_capa_anterior):
 		#self.deltas = deltas
-		w = matriz_de_pesos_capa_anterior.transpuesta()
-		#print(w)
-		d = deltas_capa_anterior
-		#print(d)
-		da = self.vector_z.evaluar(self.factiv.derivada)
-		#print(da)
-		w_da = w.mul_mat(da)
+	#	w = matriz_de_pesos_capa_anterior
+		#print('W(L)\n',w)
+	#	d = deltas_capa_anterior
+		#print('d(L)\n',d)
+	#	w_d = w.transpuesta().mul_mat(d)
+		#print('WTd(L)\n',w_d)
+	#	da = self.vector_z.evaluar(self.factiv.derivada)
+		#print('da(L-1)\n',da)
+	#	w = w.transpuesta()
+	#	w_da = w.mul_mat(da)
 		#print(w_da)
-		return w_da.mul_directa_mat(d)
+	#	aux = w_da.mul_directa_mat(da)
+		#print(aux)
+		#return w_da.mul_directa_mat(d)
+	#	return aux
 		
 		#nuevos_deltas = []
 		#for i,neurona in enumearate(self.neuronas):
@@ -116,25 +122,29 @@ class CapaNeuronal:
 		#	nuevos_deltas.append(nuevo_delta)
 		#return nuevos_deltas
 		
-	def actualizar_pesos(self, learning_rate):
+	#def actualizar_pesos(self, learning_rate):
 		#dim_m = self.matriz_w.dim_m()
-		lr = Matriz(self.vector_d.dim_n(), self.vector_d.dim_m(), [-learning_rate])
-		deltas = self.vector_d.mul_directa_mat(lr)
-		aux = self.vector_x.mul_mat(deltas.transpuesta())
-		self.matriz_w = self.matriz_w.sum_mat(aux.transpuesta())
+	#	lr = Matriz(self.vector_d.dim_n(), self.vector_d.dim_m(), [-learning_rate])
+	#	deltas = self.vector_d.mul_directa_mat(lr)
+	#	aux = self.vector_x.mul_mat(deltas.transpuesta())
+	#	self.matriz_w = self.matriz_w.sum_mat(aux.transpuesta())
 		#ACTUALIZAR BIAS
-		self.vector_b = self.vector_b.sum_mat(deltas)
+	#	self.vector_b = self.vector_b.sum_mat(deltas)
 		#print(self.vector_b)
-		return
+	#	return
 	
 	def obtener_z(self):
 		return self.vector_z
 	
 	def obtener_matriz_de_pesos(self):
 		return self.matriz_w
+	
+	#NUEVAS FUNCIONES
+	
 		
-	#def __len__(self):
-	#	return self.cant_neuronas
+	
+	def __len__(self):
+		return self.cant_neuronas
 
 from Funciones import *
 
@@ -147,4 +157,4 @@ def testCapaNeuronal():
 	Test.test(r.getColumn(0)[0],14)
 	Test.test(r.getColumn(0)[1],14)
 	
-testCapaNeuronal()
+#testCapaNeuronal()

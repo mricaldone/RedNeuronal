@@ -33,7 +33,6 @@ class Neurona:
 		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
 		for i in range(len(self.vector_w)):
 			self.vector_w[i] = self.vector_w[i] - delta * self.vector_x[i] * learning_rate
-		#print(self.vector_w)
 		
 	def actualizar_bias(self, delta, learning_rate):
 		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR

@@ -1,2 +1,2 @@
-python RedNeuronal.py
+python main.py
 pause

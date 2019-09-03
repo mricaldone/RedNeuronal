@@ -67,7 +67,7 @@ class RedNeuronal:
 		self._entrenar_capas(deltas, learning_rate)
 		return self._calcular_tolerancia(valores_esperados, valores_obtenidos)
 		
-	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 1000, learning_rate = 0.05, tolerancia = 0):
+	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 10000, learning_rate = 0.5, tolerancia = 0):
 		for i in range(epochs):
 			stop = True
 			for entradas, valores_esperados in zip(conjunto_de_entradas, conjunto_de_valores_esperados):
@@ -78,7 +78,7 @@ class RedNeuronal:
 		return i + 1
 
 def testRedNeuronal():
-	LEARNING_RATE = 10
+	LEARNING_RATE = 0.5
 	EPOCHS = 10000
 	TOLERANCIA = 0.05
 	F = Sigmoide()

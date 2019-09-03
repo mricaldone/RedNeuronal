@@ -27,25 +27,27 @@ class Neurona:
 		return self.y
 		
 	def actualizar_pesos(self, delta, learning_rate):
-		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - deltas * (da/dZ) * (dZ/dW) * LR = W - deltas * a´(Z) * entradas * LR
+		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
 		for i in range(len(self.vector_w)):
-			self.vector_w[i] = self.vector_w[i] - delta * self.f_activ.derivada(self.z) * self.vector_x[i] * learning_rate
+			self.vector_w[i] = self.vector_w[i] - delta * self.vector_x[i] * learning_rate
 		
 	def actualizar_bias(self, delta, learning_rate):
-		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (da/dZ) * (dZ/db) * LR = b - deltas * a´(Z) * LR
-		self.b = self.b - delta * self.f_activ.derivada(self.z) * learning_rate
+		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
+		self.b = self.b - delta * learning_rate
 	
-	def generar_deltas_de_capa_intermedia(self, d):
-		#LOS NUEVOS DELTAS SE CALCULAN COMO D = D * (da/dZ) * (dZ/da) = D * a´(Z) * W
-		deltas = []
-		for w in self.vector_w:
-			deltas.append(d * w * self.f_activ.derivada(self.z))
-		return deltas
+	def generar_delta_de_capa_intermedia(self, delta):
+		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
+		return delta * self.f_activ.derivada(self.z)
 		
 	def generar_delta_de_capa_final(self, valor_esperado):
 		#EL DELTA SE CALCULA COMO d = (dC/da) * (da/dz) = C'(a) * a'(z)
-		#DERIVADA DEL COSTE
-		dc = self.f_costo.derivada(valor_esperado, self.y)
-		#DERIVADA DE LA ACTIVACION
-		da = self.f_activ.derivada(self.z)
+		dc = self.f_costo.derivada(valor_esperado, self.y)	#DERIVADA DEL COSTE
+		da = self.f_activ.derivada(self.z)					#DERIVADA DE LA ACTIVACION
 		return da * dc
+		
+	def generar_deltas_capa_siguiente(self, delta):
+		#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
+		deltas = []
+		for w in self.vector_w:
+			deltas.append(delta * w)
+		return deltas 

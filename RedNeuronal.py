@@ -42,27 +42,21 @@ class RedNeuronal:
 	def _ultima_capa(self):
 		return self.capas[len(self.capas) - 1]
 		
-	def _generar_deltas(self, entradas, y_esperados):
-		return self._ultima_capa().generar_deltas_de_capa_final(y_esperados)
-	
-	def _entrenar_capas(self, deltas, learning_rate):
-		for capa in reversed(self.capas):
-			deltas = capa.entrenar(deltas, learning_rate)
-		return
-		
 	def _calcular_tolerancia(self, valores_esperados, valores_obtenidos):
 		tolerancias = []
 		for valor_obtenido, valor_esperado in zip(valores_obtenidos, valores_esperados):
-			tolerancias.append(valor_obtenido - valor_esperado)
+			tolerancias.append(abs(valor_obtenido - valor_esperado))
 		return max(tolerancias)
 		
 	def entrenar(self, entradas, valores_esperados, learning_rate = 0.01):
 		#PROCESO TODAS LAS ENTRADAS
 		valores_obtenidos = self.procesar(entradas)
-		#OBTENGO LOS DELTAS QUE LE VOY A TRANSFERIR A LA ULTIMA CAPA
-		deltas = self._generar_deltas(entradas, valores_esperados)
-		#TRANSFIERO LOS DELTAS DESDE LA ULTIMA CAPA HASTA LA PRIMERA
-		self._entrenar_capas(deltas, learning_rate)
+		#ENTRENO LAS CAPAS DE ATRAS HACIA ADELANTE
+		for capa in reversed(self.capas):
+			if capa == self._ultima_capa():
+				deltas = capa.entrenar_capa_final(valores_esperados, learning_rate)
+			else:	
+				deltas = capa.entrenar_capa_intermedia(deltas, learning_rate)
 		return self._calcular_tolerancia(valores_esperados, valores_obtenidos)
 		
 	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 1000, learning_rate = 0.05, tolerancia = 0):
@@ -76,13 +70,17 @@ class RedNeuronal:
 		return i + 1
 
 def testRedNeuronal():
-	LEARNING_RATE = 20
+	LEARNING_RATE = 0.5
 	EPOCHS = 10000
-	TOLERANCIA = 0.1
+	TOLERANCIA = 0.05
 	F = Sigmoide()
 	print('TEST RED NEURONAL')
 	rn = RedNeuronal(4, [2,2,4], F)
 	rn.entrenar([1,1,1,1],[1,1,1,1])
+	rn = RedNeuronal(4, [4], F)
+	rn.entrenar([1,1,1,1],[1,1,1,1])
+	rn = RedNeuronal(1, [1], F)
+	rn.entrenar([1],[1])
 	#return
 	print('PRUEBA COMPUERTA AND')
 	rn = RedNeuronal(2, [1], F)

@@ -32,28 +32,47 @@ class CapaNeuronal:
 			vector_r.append(neurona.procesar(entradas))
 		return vector_r
 	
-	def entrenar(self, deltas, learning_rate):
-		#print(deltas)
-		sumatoria = [0] * self.cant_entradas
-		#DERIVADA DE Z RESPECTO DE CADA ACTIVACION DE LA CAPA ANTERIOR (ES DECIR LAS ENTRADAS): LOS PESOS DE ESTA CAPA
-		#DERIVADA DE Z RESPECTO DE CADA PESO DE ESTA CAPA: LAS ENTRADAS DE ESTA CAPA
-		#DERIVADA DE Z RESPECTO DE CADA PARAMETRO DE BIAS: UNO
-		for neurona, delta in zip(self.neuronas, deltas):
-			#CALCULO LOS NUEVOS BIAS
-			#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (da/dZ) * (dZ/db) * LR = b - deltas * A´(Z) * LR
-			neurona.actualizar_bias(delta, learning_rate)
-			#CALCULO LOS NUEVOS PESOS
-			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - deltas * (da/dZ) * (dZ/dW) * LR = W - deltas * A´(Z) * entradas * LR
-			neurona.actualizar_pesos(delta, learning_rate)
-			#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
-			#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (dZ/da) = d * W
-			nuevos_deltas = neurona.generar_deltas_de_capa_intermedia(delta)
-			for i, nuevo_delta in enumerate(nuevos_deltas):
-				sumatoria[i] = sumatoria[i] + nuevo_delta
-		return sumatoria
+	#def generar_deltas_de_capa_final(self, y_esperados):
+	#	deltas = []
+	#	for neurona, y_esperado in zip(self.neuronas, y_esperados):
+	#		deltas.append(neurona.generar_delta_de_capa_final(y_esperado))
+	#	return deltas
 	
-	def generar_deltas_de_capa_final(self, y_esperados):
+	def entrenar_capa_intermedia(self, deltas, learning_rate):
+		sumatoria = [0] * self.cant_neuronas
+		for delta in deltas:
+			for i,d in enumerate(delta):
+				sumatoria[i] = sumatoria[i] + d
+		deltas = sumatoria
+		nuevos_deltas = []
+		for neurona, delta in zip(self.neuronas, deltas):
+			#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
+			#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
+			delta = neurona.generar_delta_de_capa_intermedia(delta)
+			#CALCULO LOS NUEVOS PESOS
+			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
+			neurona.actualizar_pesos(delta, learning_rate)
+			#CALCULO LOS NUEVOS BIAS
+			#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
+			neurona.actualizar_bias(delta, learning_rate)
+			#CALCULO LOS DELTAS PARA LA CAPA SIGUIENTE
+			#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
+			nuevos_deltas.append(neurona.generar_deltas_capa_siguiente(delta))
+		return nuevos_deltas
+		
+	def entrenar_capa_final(self, y_esperados, learning_rate):
 		deltas = []
 		for neurona, y_esperado in zip(self.neuronas, y_esperados):
-			deltas.append(neurona.generar_delta_de_capa_final(y_esperado))
+			#CALCULO LOS DELTAS FINALES PARA LA CAPA SIGUIENTE
+			#LOS DELTAS FINALES SE CALCULAN COMO d = (dC/da) (da/dz) = C´(a) * a´(z)
+			delta = neurona.generar_delta_de_capa_final(y_esperado)
+			#CALCULO LOS NUEVOS PESOS
+			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - (dC/da) * (da/dz) * (dz/dw) * LR = W - deltas * entradas * LR
+			neurona.actualizar_pesos(delta, learning_rate)
+			#CALCULO LOS NUEVOS BIAS
+			#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - (dC/da) * (da/dz) * (dz/db) * LR = b - deltas * 1 * LR
+			neurona.actualizar_bias(delta, learning_rate)
+			#CALCULO LOS DELTAS PARA LA CAPA SIGUIENTE
+			#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
+			deltas.append(neurona.generar_deltas_capa_siguiente(delta))
 		return deltas

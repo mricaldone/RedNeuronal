@@ -43,7 +43,6 @@ class RedNeuronal:
 		return self.capas[len(self.capas) - 1]
 		
 	def _generar_deltas(self, entradas, y_esperados):
-		self.procesar(entradas)
 		return self._ultima_capa().generar_deltas_de_capa_final(y_esperados)
 	
 	def _entrenar_capas(self, deltas, learning_rate):
@@ -51,22 +50,35 @@ class RedNeuronal:
 			deltas = capa.entrenar(deltas, learning_rate)
 		return
 		
+	def _calcular_tolerancia(self, valores_esperados, valores_obtenidos):
+		tolerancias = []
+		for valor_obtenido, valor_esperado in zip(valores_obtenidos, valores_esperados):
+			tolerancias.append(valor_obtenido - valor_esperado)
+		return max(tolerancias)
+		
 	def entrenar(self, entradas, valores_esperados, learning_rate = 0.01):
+		#PROCESO TODAS LAS ENTRADAS
+		valores_obtenidos = self.procesar(entradas)
 		#OBTENGO LOS DELTAS QUE LE VOY A TRANSFERIR A LA ULTIMA CAPA
 		deltas = self._generar_deltas(entradas, valores_esperados)
 		#TRANSFIERO LOS DELTAS DESDE LA ULTIMA CAPA HASTA LA PRIMERA
 		self._entrenar_capas(deltas, learning_rate)
-		return
+		return self._calcular_tolerancia(valores_esperados, valores_obtenidos)
 		
-	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 1000, learning_rate = 0.05):
+	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 1000, learning_rate = 0.05, tolerancia = 0):
 		for i in range(epochs):
+			stop = True
 			for entradas, valores_esperados in zip(conjunto_de_entradas, conjunto_de_valores_esperados):
-				self.entrenar(entradas, valores_esperados, learning_rate)
-		return i
+				if self.entrenar(entradas, valores_esperados, learning_rate) > tolerancia:
+					stop = False
+			if stop:
+				break
+		return i + 1
 
 def testRedNeuronal():
-	LEARNING_RATE = 8
-	EPOCHS = 1000
+	LEARNING_RATE = 20
+	EPOCHS = 10000
+	TOLERANCIA = 0.1
 	F = Sigmoide()
 	print('TEST RED NEURONAL')
 	rn = RedNeuronal(4, [2,2,4], F)
@@ -76,7 +88,7 @@ def testRedNeuronal():
 	rn = RedNeuronal(2, [1], F)
 	datos = [[1,1],[1,0],[0,1],[0,0]]
 	esperados = [[1],[0],[0],[0]]
-	rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE)
+	print('EPOCHS', rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE, TOLERANCIA))
 	print(rn.procesar([1,1]))
 	print(rn.procesar([1,0]))
 	print(rn.procesar([0,1]))
@@ -85,7 +97,7 @@ def testRedNeuronal():
 	rn = RedNeuronal(2, [1], F)
 	datos = [[1,1],[1,0],[0,1],[0,0]]
 	esperados = [[1],[1],[1],[0]]
-	rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE)
+	print('EPOCHS', rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE, TOLERANCIA))
 	print(rn.procesar([1,1]))
 	print(rn.procesar([1,0]))
 	print(rn.procesar([0,1]))
@@ -94,7 +106,7 @@ def testRedNeuronal():
 	rn = RedNeuronal(2, [2,1], F)
 	datos = [[1,1],[1,0],[0,1],[0,0]]
 	esperados = [[1],[0],[0],[1]]
-	rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE)
+	print('EPOCHS', rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE, TOLERANCIA))
 	print(rn.procesar([1,1]))
 	print(rn.procesar([1,0]))
 	print(rn.procesar([0,1]))
@@ -103,7 +115,7 @@ def testRedNeuronal():
 	rn = RedNeuronal(2, [2,1], F)
 	datos = [[1,1],[1,0],[0,1],[0,0]]
 	esperados = [[0],[1],[1],[0]]
-	rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE)
+	print('EPOCHS', rn.entrenar_set(datos, esperados, EPOCHS, LEARNING_RATE, TOLERANCIA))
 	print(rn.procesar([1,1]))
 	print(rn.procesar([1,0]))
 	print(rn.procesar([0,1]))

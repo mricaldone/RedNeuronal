@@ -34,8 +34,9 @@ class Relu:
 	
 class ErrorCuadraticoMedio:
 	
-	def evaluar(self, b, a):
-		return 0.5 * (b - a) ** 2
+	def evaluar(self, x, y):
+		#Y: VALOR REAL. X: VALOR ESTIMADO
+		return 0.5 * (y - x) ** 2
 	
-	def derivada(self, b, a):
-		return a - b
+	def derivada(self, x, y):
+		return x - y

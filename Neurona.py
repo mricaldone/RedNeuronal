@@ -12,12 +12,14 @@ class Neurona:
 		self.z = None
 		
 	def _generar_vector_w(self):
-		return np.random.rand(self.cant_entradas)
+		return np.random.rand(self.cant_entradas) * 2 - 1
 		#return [1] * self.cant_entradas
+		#return [0] * self.cant_entradas
 		
 	def _generar_bias(self):
-		return np.random.rand()
+		return np.random.rand() * 2 - 1
 		#return 1
+		#return 0
 	
 	def procesar(self, entradas):
 		self.vector_x = entradas
@@ -30,11 +32,12 @@ class Neurona:
 	def actualizar_pesos(self, delta, learning_rate):
 		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
 		for i in range(len(self.vector_w)):
-			self.vector_w[i] = self.vector_w[i] + delta * self.vector_x[i] * learning_rate
+			self.vector_w[i] = self.vector_w[i] - delta * self.vector_x[i] * learning_rate
+		#print(self.vector_w)
 		
 	def actualizar_bias(self, delta, learning_rate):
 		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
-		self.b = self.b + delta * learning_rate
+		self.b = self.b - delta * learning_rate
 	
 	def generar_delta(self, delta):
 		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)

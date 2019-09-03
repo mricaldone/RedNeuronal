@@ -1,7 +1,4 @@
-from Funciones import *
-from Test import *
 from Neurona import *
-import numpy as np
 
 class CapaNeuronal:
 	
@@ -35,11 +32,9 @@ class CapaNeuronal:
 			vector_r.append(neurona.procesar(entradas))
 		return vector_r
 	
-	def procesar_deltas(self, deltas, learning_rate):
+	def entrenar(self, deltas, learning_rate):
 		#print(deltas)
-		n = self.len_entradas()
-		m = self.len_salidas()
-		sumatoria = [0] * n
+		sumatoria = [0] * self.cant_entradas
 		#DERIVADA DE Z RESPECTO DE CADA ACTIVACION DE LA CAPA ANTERIOR (ES DECIR LAS ENTRADAS): LOS PESOS DE ESTA CAPA
 		#DERIVADA DE Z RESPECTO DE CADA PESO DE ESTA CAPA: LAS ENTRADAS DE ESTA CAPA
 		#DERIVADA DE Z RESPECTO DE CADA PARAMETRO DE BIAS: UNO
@@ -52,32 +47,13 @@ class CapaNeuronal:
 			neurona.actualizar_pesos(delta, learning_rate)
 			#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
 			#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (dZ/da) = d * W
-			aux = neurona.generar_proximos_deltas(delta)
-			for i in range(n):
-				sumatoria[i] = sumatoria[i] + aux[i]
+			nuevos_deltas = neurona.generar_deltas_de_capa_intermedia(delta)
+			for i, nuevo_delta in enumerate(nuevos_deltas):
+				sumatoria[i] = sumatoria[i] + nuevo_delta
 		return sumatoria
 	
-	def generar_deltas(self, y_esperados):
+	def generar_deltas_de_capa_final(self, y_esperados):
 		deltas = []
 		for neurona, y_esperado in zip(self.neuronas, y_esperados):
-			deltas.append(neurona.generar_delta(y_esperado))
+			deltas.append(neurona.generar_delta_de_capa_final(y_esperado))
 		return deltas
-		
-	def len_entradas(self):
-		return self.cant_entradas
-		
-	def len_salidas(self):
-		return self.cant_neuronas
-
-from Funciones import *
-
-def testCapaNeuronal():
-	print('TEST CAPA NEURONAL')
-	f = Relu()
-	capa = CapaNeuronal(2,2,f)
-	m = Matriz(2,1,[3,11])
-	r = capa.procesar(m)
-	Test.test(r.getColumn(0)[0],14)
-	Test.test(r.getColumn(0)[1],14)
-	
-#testCapaNeuronal()

@@ -1,6 +1,5 @@
 from CapaNeuronal import *
 from Funciones import *
-from Test import *
 
 class RedNeuronal:
 	
@@ -45,18 +44,18 @@ class RedNeuronal:
 		
 	def _generar_deltas(self, entradas, y_esperados):
 		self.procesar(entradas)
-		return self._ultima_capa().generar_deltas(y_esperados)
+		return self._ultima_capa().generar_deltas_de_capa_final(y_esperados)
 	
-	def _propagar_deltas(self, deltas, learning_rate):
+	def _entrenar_capas(self, deltas, learning_rate):
 		for capa in reversed(self.capas):
-			deltas = capa.procesar_deltas(deltas, learning_rate)
+			deltas = capa.entrenar(deltas, learning_rate)
 		return
 		
 	def entrenar(self, entradas, valores_esperados, learning_rate = 0.01):
 		#OBTENGO LOS DELTAS QUE LE VOY A TRANSFERIR A LA ULTIMA CAPA
 		deltas = self._generar_deltas(entradas, valores_esperados)
 		#TRANSFIERO LOS DELTAS DESDE LA ULTIMA CAPA HASTA LA PRIMERA
-		self._propagar_deltas(deltas, learning_rate)
+		self._entrenar_capas(deltas, learning_rate)
 		return
 		
 	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 1000, learning_rate = 0.05):
@@ -66,8 +65,8 @@ class RedNeuronal:
 		return i
 
 def testRedNeuronal():
-	LEARNING_RATE = 10
-	EPOCHS = 100000
+	LEARNING_RATE = 8
+	EPOCHS = 1000
 	F = Sigmoide()
 	print('TEST RED NEURONAL')
 	rn = RedNeuronal(4, [2,2,4], F)

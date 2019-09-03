@@ -26,13 +26,6 @@ class Neurona:
 		self.y = self.f_activ.evaluar(self.z)
 		return self.y
 		
-	def generar_proximos_deltas(self, d):
-		#LOS NUEVOS DELTAS SE CALCULAN COMO D = D * (da/dZ) * (dZ/da)
-		deltas = []
-		for w in self.vector_w:
-			deltas.append(d * w * self.f_activ.derivada(self.z))
-		return deltas
-	
 	def actualizar_pesos(self, delta, learning_rate):
 		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - deltas * (da/dZ) * (dZ/dW) * LR = W - deltas * a´(Z) * entradas * LR
 		for i in range(len(self.vector_w)):
@@ -41,8 +34,15 @@ class Neurona:
 	def actualizar_bias(self, delta, learning_rate):
 		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (da/dZ) * (dZ/db) * LR = b - deltas * a´(Z) * LR
 		self.b = self.b - delta * self.f_activ.derivada(self.z) * learning_rate
+	
+	def generar_deltas_de_capa_intermedia(self, d):
+		#LOS NUEVOS DELTAS SE CALCULAN COMO D = D * (da/dZ) * (dZ/da) = D * a´(Z) * W
+		deltas = []
+		for w in self.vector_w:
+			deltas.append(d * w * self.f_activ.derivada(self.z))
+		return deltas
 		
-	def generar_delta(self, valor_esperado):
+	def generar_delta_de_capa_final(self, valor_esperado):
 		#EL DELTA SE CALCULA COMO d = (dC/da) * (da/dz) = C'(a) * a'(z)
 		#DERIVADA DEL COSTE
 		dc = self.f_costo.derivada(valor_esperado, self.y)

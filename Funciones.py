@@ -1,7 +1,8 @@
 class Sigmoide:
 	
 	def __init__(self):
-		self.e = 2.718281828459045235360
+		#self.e = 2.718281828459045235360
+		self.e = 2.718
 	
 	def evaluar(self, x):
 		e = self.e

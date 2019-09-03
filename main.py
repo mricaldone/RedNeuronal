@@ -1,9 +1,11 @@
 from RedNeuronal import *
+from mnist import MNIST
+import random
 
-def main():
+def test():
 	LEARNING_RATE = 10
 	EPOCHS = 1000
-	TOLERANCIA = 0.1
+	TOLERANCIA = 0.5
 	F = Sigmoide()
 	#F = Relu()
 	print('TEST RED NEURONAL')
@@ -65,5 +67,42 @@ def main():
 	print(rn.procesar([1,0]))
 	print(rn.procesar([0,1]))
 	print(rn.procesar([0,0]))
+
+def activar_entradas(entradas, factiv):
+	r = []
+	for entrada in entradas:
+		ne = []
+		for valor in entrada:
+			ne.append(valor/10)
+		r.append(ne)
+	return r
+	
+def mnist_test():
+	LEARNING_RATE = 0.1
+	EPOCHS = 1000
+	TOLERANCIA = 0.1
+	F = Sigmoide()
+	
+	mndata = MNIST('samples')
+
+	images, labels = mndata.load_training()
+	labels = [labels]
+	labels = activar_entradas(labels, F)
+	
+	rn = RedNeuronal(784, [784,8,1], F)
+	print('EPOCHS', rn.entrenar_set(images, labels, EPOCHS, LEARNING_RATE, TOLERANCIA))
+	
+	images, labels = mndata.load_testing()
+	
+	while True:
+		index = random.randrange(0, len(images))
+		r = rn.procesar(images[index])
+		print(mndata.display(images[index]))
+		print("Esperado", labels[index])
+		print("Resultado:", r[0] * 10)
+		input()
+	
+def main():
+	mnist_test()
 	
 main()

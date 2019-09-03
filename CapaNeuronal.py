@@ -35,18 +35,12 @@ class CapaNeuronal:
 			vector_r.append(neurona.procesar(entradas))
 		return vector_r
 	
-	#PROXIMA A RETIRAR:
-	def _obtener_pesos(self):
-		matriz_w = []
-		for neurona in self.neuronas:
-			matriz_w.append(neurona.obtener_pesos())
-		return matriz_w
-	
 	def procesar_deltas(self, deltas, learning_rate):
+		#print(deltas)
 		n = self.len_entradas()
 		m = self.len_salidas()
+		sumatoria = [0] * n
 		#DERIVADA DE Z RESPECTO DE CADA ACTIVACION DE LA CAPA ANTERIOR (ES DECIR LAS ENTRADAS): LOS PESOS DE ESTA CAPA
-		matriz_w = self._obtener_pesos()
 		#DERIVADA DE Z RESPECTO DE CADA PESO DE ESTA CAPA: LAS ENTRADAS DE ESTA CAPA
 		#DERIVADA DE Z RESPECTO DE CADA PARAMETRO DE BIAS: UNO
 		for neurona, delta in zip(self.neuronas, deltas):
@@ -56,23 +50,12 @@ class CapaNeuronal:
 			#CALCULO LOS NUEVOS PESOS
 			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - deltas * (da/dZ) * (dZ/dW) * LR = W - deltas * A´(Z) * entradas * LR
 			neurona.actualizar_pesos(delta, learning_rate)
-		#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
-		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (dZ/da) = d * W
-		
-		#NO ME GUSTA:
-		nueva_matriz_d = []
-		for fila_w, d in zip(matriz_w, deltas):
-			nuevos_deltas = []
-			for w in fila_w:
-				nuevos_deltas.append(d * w)
-			nueva_matriz_d.append(nuevos_deltas)
-		nuevo_vector_d = [0] * n
-		for fila_d in nueva_matriz_d:
-			for i,d in enumerate(fila_d):
-				nuevo_vector_d[i] = nuevo_vector_d[i] + d
-				if i == m - 1:
-					nuevo_vector_d[i] = nuevo_vector_d[i] / m
-		return nuevo_vector_d
+			#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
+			#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (dZ/da) = d * W
+			aux = neurona.generar_proximos_deltas(delta)
+			for i in range(n):
+				sumatoria[i] = sumatoria[i] + aux[i]
+		return sumatoria
 	
 	def generar_deltas(self, y_esperados):
 		deltas = []

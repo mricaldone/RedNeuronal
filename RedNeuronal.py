@@ -66,12 +66,13 @@ class RedNeuronal:
 		return i
 
 def testRedNeuronal():
-	LEARNING_RATE = 5
-	EPOCHS = 1000
+	LEARNING_RATE = 10
+	EPOCHS = 100000
 	F = Sigmoide()
 	print('TEST RED NEURONAL')
 	rn = RedNeuronal(4, [2,2,4], F)
 	rn.entrenar([1,1,1,1],[1,1,1,1])
+	#return
 	print('PRUEBA COMPUERTA AND')
 	rn = RedNeuronal(2, [1], F)
 	datos = [[1,1],[1,0],[0,1],[0,0]]

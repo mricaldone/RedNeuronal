@@ -25,10 +25,13 @@ class Neurona:
 			self.z = self.z + x * w
 		self.y = self.f_activ.evaluar(self.z)
 		return self.y
-	
-	#PROXIMA A RETIRAR:
-	def obtener_pesos(self):
-		return self.vector_w
+		
+	def generar_proximos_deltas(self, d):
+		#LOS NUEVOS DELTAS SE CALCULAN COMO D = D * (da/dZ) * (dZ/da)
+		deltas = []
+		for w in self.vector_w:
+			deltas.append(d * w * self.f_activ.derivada(self.z))
+		return deltas
 	
 	def actualizar_pesos(self, delta, learning_rate):
 		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dW) * LR = W - deltas * (da/dZ) * (dZ/dW) * LR = W - deltas * a´(Z) * entradas * LR

@@ -23,7 +23,7 @@ class RedNeuronal:
 		capas = []
 		cant_entradas_de_la_capa = self.cant_entradas
 		for cant_neuronas in estructura:
-			capa_neuronal = CapaNeuronal(cant_neuronas, cant_entradas_de_la_capa, self.factiv, self.fcosto)
+			capa_neuronal = CapaNeuronal(cant_neuronas, cant_entradas_de_la_capa, self.factiv)
 			capas.append(capa_neuronal)
 			#LA PROXIMA CAPA TENDRA TANTAS ENTRADAS COMO NEURONAS EN LA CAPA ACTUAL
 			cant_entradas_de_la_capa = cant_neuronas
@@ -41,22 +41,30 @@ class RedNeuronal:
 		
 	def _ultima_capa(self):
 		return self.capas[len(self.capas) - 1]
-		
+	
+	def _aplicar_derivada_de_coste(self, valores_obtenidos, valores_esperados):
+		vector_dcoste = []
+		for valor_obtenido, valor_esperado in zip(valores_obtenidos, valores_esperados):
+			vector_dcoste.append(self.fcosto.derivada(valor_obtenido, valor_esperado))
+		return vector_dcoste
+	
+	def _entrenar_capas(self, deltas, learning_rate):
+		for capa in reversed(self.capas):
+			deltas = capa.entrenar_capa(deltas, learning_rate)
+	
 	def _calcular_tolerancia(self, valores_esperados, valores_obtenidos):
 		tolerancias = []
 		for valor_obtenido, valor_esperado in zip(valores_obtenidos, valores_esperados):
 			tolerancias.append(abs(valor_obtenido - valor_esperado))
 		return max(tolerancias)
-		
+	
 	def entrenar(self, entradas, valores_esperados, learning_rate = 0.01):
 		#PROCESO TODAS LAS ENTRADAS
 		valores_obtenidos = self.procesar(entradas)
+		#APLICO LA DERIVADA DE LA FUNCION DE COSTE
+		deltas = self._aplicar_derivada_de_coste(valores_obtenidos, valores_esperados)
 		#ENTRENO LAS CAPAS DE ATRAS HACIA ADELANTE
-		for capa in reversed(self.capas):
-			if capa == self._ultima_capa():
-				deltas = capa.entrenar_capa_final(valores_esperados, learning_rate)
-			else:	
-				deltas = capa.entrenar_capa_intermedia(deltas, learning_rate)
+		self._entrenar_capas(deltas, learning_rate)
 		return self._calcular_tolerancia(valores_esperados, valores_obtenidos)
 		
 	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 1000, learning_rate = 0.05, tolerancia = 0):
@@ -70,18 +78,19 @@ class RedNeuronal:
 		return i + 1
 
 def testRedNeuronal():
-	LEARNING_RATE = 0.5
+	LEARNING_RATE = 10
 	EPOCHS = 10000
 	TOLERANCIA = 0.05
 	F = Sigmoide()
 	print('TEST RED NEURONAL')
+	rn = RedNeuronal(2, [1], F)
+	rn.entrenar([1,1],[0])
 	rn = RedNeuronal(4, [2,2,4], F)
 	rn.entrenar([1,1,1,1],[1,1,1,1])
 	rn = RedNeuronal(4, [4], F)
 	rn.entrenar([1,1,1,1],[1,1,1,1])
 	rn = RedNeuronal(1, [1], F)
-	rn.entrenar([1],[1])
-	#return
+	rn.entrenar([1,1],[1])
 	print('PRUEBA COMPUERTA AND')
 	rn = RedNeuronal(2, [1], F)
 	datos = [[1,1],[1,0],[0,1],[0,0]]

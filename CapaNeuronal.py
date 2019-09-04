@@ -35,15 +35,13 @@ class CapaNeuronal:
 	def _sumar_columnas(self, matriz):
 		sumatoria = [0] * self.cant_entradas
 		for fila in matriz:
-			for i, valor in enumerate(fila):
-				sumatoria[i] = sumatoria[i] + valor
+			for j, valor in enumerate(fila):
+				sumatoria[j] = sumatoria[j] + valor
 		return sumatoria
 	
 	def entrenar_capa(self, deltas, learning_rate):
-		print('CAPA')
 		nuevos_deltas = []
 		for neurona, delta in zip(self.neuronas, deltas):
-			print('NEURONA')
 			#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
 			#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
 			delta = neurona.generar_delta(delta)
@@ -56,4 +54,5 @@ class CapaNeuronal:
 			#CALCULO LOS NUEVOS BIAS
 			#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
 			neurona.actualizar_bias(delta, learning_rate)
+			#print(neurona)
 		return self._sumar_columnas(nuevos_deltas)

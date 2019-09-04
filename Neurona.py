@@ -10,6 +10,7 @@ class Neurona:
 		self.vector_x = None
 		self.y = None
 		self.z = None
+		#print(self.vector_w, self.b)
 		
 	def _generar_vector_w(self):
 		return np.random.rand(self.cant_entradas) * 2 - 1
@@ -27,7 +28,7 @@ class Neurona:
 		for x, w in zip(self.vector_x, self.vector_w):
 			self.z = self.z + x * w
 		self.y = self.f_activ.evaluar(self.z)
-		print(self)
+		#print(self)
 		return self.y
 		
 	def actualizar_pesos(self, delta, learning_rate):

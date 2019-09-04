@@ -61,6 +61,7 @@ class RedNeuronal:
 	def entrenar(self, entradas, valores_esperados, learning_rate = 0.01):
 		#PROCESO TODAS LAS ENTRADAS
 		valores_obtenidos = self.procesar(entradas)
+		print('R',valores_obtenidos)
 		#APLICO LA DERIVADA DE LA FUNCION DE COSTE
 		deltas = self._aplicar_derivada_de_coste(valores_obtenidos, valores_esperados)
 		#ENTRENO LAS CAPAS DE ATRAS HACIA ADELANTE

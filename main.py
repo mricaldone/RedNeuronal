@@ -102,7 +102,16 @@ def mnist_test():
 		print("Resultado:", r[0] * 10)
 		input()
 	
+def pruebas_neuronales():
+	LEARNING_RATE = 10
+	EPOCHS = 10000
+	TOLERANCIA = 0.1
+	F = Sigmoide()
+	rn = RedNeuronal(2, [1,2,1], F)
+	e = rn.entrenar_set([[0,0],[0,1],[1,0],[1,1]], [[0],[1],[1],[0]], EPOCHS, LEARNING_RATE, TOLERANCIA)
+	print('EPOCHS', e)
+	
 def main():
-	mnist_test()
+	pruebas_neuronales()
 	
 main()

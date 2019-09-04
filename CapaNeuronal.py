@@ -40,8 +40,10 @@ class CapaNeuronal:
 		return sumatoria
 	
 	def entrenar_capa(self, deltas, learning_rate):
+		print('CAPA')
 		nuevos_deltas = []
 		for neurona, delta in zip(self.neuronas, deltas):
+			print('NEURONA')
 			#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
 			#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
 			delta = neurona.generar_delta(delta)

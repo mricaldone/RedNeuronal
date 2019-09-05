@@ -70,28 +70,26 @@ def test():
 	print(rn.procesar([0,1]))
 	print(rn.procesar([0,0]))
 
-def activar_entradas(entradas, factiv):
+def activar_salidas(salidas):
 	r = []
-	for entrada in entradas:
-		ne = []
-		for valor in entrada:
-			ne.append(valor/10)
-		r.append(ne)
+	for salida in salidas:
+		r.append([salida / 10])
 	return r
 	
 def mnist_test():
-	LEARNING_RATE = 0.001
-	EPOCHS = 10000
+	LEARNING_RATE = 0.5
+	EPOCHS = 1
 	TOLERANCIA = 0.05
 	F = Sigmoide()
 	
 	mndata = MNIST('samples')
 
 	images, labels = mndata.load_training()
-	labels = [labels]
-	labels = activar_entradas(labels, F)
+	labels = activar_salidas(labels)
 	
-	rn = RedNeuronal(784, [784,15,10,1], F)
+	#rn = RedNeuronal(784, [784,392,196,98,49,25,10,1], F)
+	rn = RedNeuronal(784, [784,10,1], F)
+	
 	print('EPOCHS', rn.entrenar_set(images, labels, EPOCHS, LEARNING_RATE, TOLERANCIA))
 	
 	images, labels = mndata.load_testing()
@@ -126,7 +124,7 @@ def imprimir_grafico(rn, paso, cant_decimales):
 			x = x + paso
 		y = y + paso
 	img = Image.fromarray(data, 'RGB')
-	img.show()
+	img.transpose(Image.FLIP_TOP_BOTTOM).show()
 		
 def pruebas_neuronales():
 	LEARNING_RATE = 10
@@ -174,7 +172,7 @@ def pruebas_neuronales():
 	print(rn.procesar([0.5,0.5]))
 	
 def main():
-	pruebas_neuronales()
-	#mnist_test()
+	#pruebas_neuronales()
+	mnist_test()
 	
 main()

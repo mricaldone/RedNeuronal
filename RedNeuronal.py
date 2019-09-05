@@ -28,16 +28,6 @@ class RedNeuronal:
 			#LA PROXIMA CAPA TENDRA TANTAS ENTRADAS COMO NEURONAS EN LA CAPA ACTUAL
 			cant_entradas_de_la_capa = cant_neuronas
 		return capas
-	
-	def procesar(self, entradas):
-		'''
-		PROCESA LAS ENTRADAS A TRAVES DE LA RED. DEVUELVE UN VECTOR DE RESULTADOS (LA LONGITUD DEL VECTOR ES LA MISMA QUE LA CANTIDAD DE NEURONAS DE LA ULTIMA CAPA)
-		PARAMETROS:
-			ENTRADAS: VECTOR CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD ESPECIFICADA AL CREAR LA RED
-		'''
-		for capa in self.capas:
-			entradas = capa.procesar(entradas)
-		return entradas
 		
 	def _ultima_capa(self):
 		return self.capas[len(self.capas) - 1]
@@ -57,6 +47,16 @@ class RedNeuronal:
 		for valor_obtenido, valor_esperado in zip(valores_obtenidos, valores_esperados):
 			tolerancias.append(abs(valor_obtenido - valor_esperado))
 		return max(tolerancias)
+	
+	def procesar(self, entradas):
+		'''
+		PROCESA LAS ENTRADAS A TRAVES DE LA RED. DEVUELVE UN VECTOR DE RESULTADOS (LA LONGITUD DEL VECTOR ES LA MISMA QUE LA CANTIDAD DE NEURONAS DE LA ULTIMA CAPA)
+		PARAMETROS:
+			ENTRADAS: VECTOR CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD ESPECIFICADA AL CREAR LA RED
+		'''
+		for capa in self.capas:
+			entradas = capa.procesar(entradas)
+		return entradas
 	
 	def entrenar(self, entradas, valores_esperados, learning_rate = 0.01):
 		#PROCESO TODAS LAS ENTRADAS

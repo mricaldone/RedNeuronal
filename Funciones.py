@@ -5,7 +5,6 @@ class Sigmoide:
 	
 	def evaluar(self, x):
 		e = self.e
-		x = round(x, 2)
 		return 1 / (1 + e ** -x)
 		
 	def derivada(self, x):

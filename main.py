@@ -69,38 +69,55 @@ def test():
 	print(rn.procesar([1,0]))
 	print(rn.procesar([0,1]))
 	print(rn.procesar([0,0]))
+	
+def preprocesar_salidas(salidas):
+	nuevas_salidas = []
+	for valor in salidas:
+		nuevas_salidas.append([valor/10])
+	return nuevas_salidas
 
-def activar_salidas(salidas):
-	r = []
-	for salida in salidas:
-		r.append([salida / 10])
-	return r
+def preprocesar_entrada(datos_de_entrada):
+	nuevos_datos = []
+	for valor in datos_de_entrada:
+		nuevos_datos.append(valor/255)
+	return nuevos_datos
+	
+def preprocesar_entradas(set_de_entradas):
+	nuevas_entradas = []
+	for entradas in set_de_entradas:
+		nuevas_entradas.append(preprocesar_entrada(entradas))
+	return nuevas_entradas
 	
 def mnist_test():
 	LEARNING_RATE = 0.5
-	EPOCHS = 1
+	EPOCHS = 10
 	TOLERANCIA = 0.05
 	F = Sigmoide()
-	
 	mndata = MNIST('samples')
-
+	
+	print("CARGANDO DATOS DE ENTRENAMIENTO")
 	images, labels = mndata.load_training()
-	labels = activar_salidas(labels)
-	
-	#rn = RedNeuronal(784, [784,392,196,98,49,25,10,1], F)
+	print("PRE-PROCESANDO SALIDAS")
+	labels = preprocesar_salidas(labels)
+	print("PRE-PROCESANDO ENTRADAS")
+	images = preprocesar_entradas(images)
+	print("GENERANDO RED NEURONAL")
 	rn = RedNeuronal(784, [784,10,1], F)
-	
+	#rn = RedNeuronal(784, [784,392,196,98,49,25,10,1], F)
+	print("ENTRENANDO")
 	print('EPOCHS', rn.entrenar_set(images, labels, EPOCHS, LEARNING_RATE, TOLERANCIA))
 	
+	print("CARGANDO DATOS DE PRUEBA")
 	images, labels = mndata.load_testing()
-	
-	while True:
+	print("INICIANDO PRUEBA")
+	while input("CONTINUAR? (Y/N):") != "N":
 		index = random.randrange(0, len(images))
-		r = rn.procesar(images[index])
+		imagen = preprocesar_entrada(images[index])
+		r = rn.procesar(imagen)
 		print(mndata.display(images[index]))
 		print("Esperado", labels[index])
 		print("Resultado:", round(r[0] * 10,0))
-		input()
+		
 
 def imprimir_grafico(rn, paso, cant_decimales):
 	#w, h = 512, 512

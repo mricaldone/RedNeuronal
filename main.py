@@ -7,7 +7,7 @@ import random
 def test():
 	LEARNING_RATE = 10
 	EPOCHS = 1000
-	TOLERANCIA = 0.5
+	TOLERANCIA = 0.1
 	F = Sigmoide()
 	#F = Relu()
 	print('TEST RED NEURONAL')
@@ -90,7 +90,7 @@ def preprocesar_entradas(set_de_entradas):
 	
 def mnist_test():
 	LEARNING_RATE = 0.5
-	EPOCHS = 10
+	EPOCHS = 1
 	TOLERANCIA = 0.05
 	F = Sigmoide()
 	mndata = MNIST('samples')
@@ -144,8 +144,8 @@ def imprimir_grafico(rn, paso, cant_decimales):
 	img.transpose(Image.FLIP_TOP_BOTTOM).show()
 		
 def pruebas_neuronales():
-	LEARNING_RATE = 10
-	EPOCHS = 10000
+	LEARNING_RATE = 0.5
+	EPOCHS = 100000
 	TOLERANCIA = 0.1
 	F = Sigmoide()
 	print('PRUEBA COMPUERTA AND')
@@ -191,5 +191,6 @@ def pruebas_neuronales():
 def main():
 	#pruebas_neuronales()
 	mnist_test()
+	#test()
 	
 main()

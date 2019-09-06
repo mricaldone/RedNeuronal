@@ -10,7 +10,6 @@ class Neurona:
 		self.vector_x = None
 		self.y = None
 		self.z = None
-		#print(self.vector_w, self.b)
 		
 	def _generar_vector_w(self):
 		return np.random.rand(self.cant_entradas) * 2 - 1
@@ -28,28 +27,40 @@ class Neurona:
 		for x, w in zip(self.vector_x, self.vector_w):
 			self.z = self.z + x * w
 		self.y = self.f_activ.evaluar(self.z)
-		#print(self)
 		return self.y
-		
-	def actualizar_pesos(self, delta, learning_rate):
-		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
-		for i in range(len(self.vector_w)):
-			self.vector_w[i] = self.vector_w[i] - delta * self.vector_x[i] * learning_rate
-		
-	def actualizar_bias(self, delta, learning_rate):
-		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
-		self.b = self.b - delta * learning_rate
 	
-	def generar_delta(self, delta):
+	def _generar_delta(self, delta):
 		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
 		return delta * self.f_activ.derivada(self.z)
 		
-	def generar_deltas_capa_siguiente(self, delta):
+	def _generar_delta_capa_siguiente(self, i, delta):
 		#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
-		deltas = []
-		for w in self.vector_w:
-			deltas.append(delta * w)
-		return deltas
+		return delta * self.vector_w[i]
+	
+	def _actualizar_pesos(self, i, delta, learning_rate):
+		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
+		self.vector_w[i] = self.vector_w[i] - delta * self.vector_x[i] * learning_rate
+	
+	def _actualizar_bias(self, delta, learning_rate):
+		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
+		self.b = self.b - delta * learning_rate
+		
+	def entrenar(self, delta, learning_rate):
+		nuevos_deltas = []
+		#GENERO EL DELTA DE ESTA CAPA
+		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
+		delta = self._generar_delta(delta)
+		for i in range(self.cant_entradas):
+			#CALCULO LOS DELTAS PARA LA CAPA SIGUIENTE
+			#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
+			nuevos_deltas.append(self._generar_delta_capa_siguiente(i, delta))
+			#CALCULO LOS NUEVOS PESOS
+			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
+			self._actualizar_pesos(i, delta, learning_rate)
+		#CALCULO LOS NUEVOS BIAS
+		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
+		self._actualizar_bias(delta, learning_rate)
+		return nuevos_deltas
 		
 	def __str__(self):
 		precision = 1

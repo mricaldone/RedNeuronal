@@ -32,27 +32,10 @@ class CapaNeuronal:
 			vector_r.append(neurona.procesar(entradas))
 		return vector_r
 	
-	def _sumar_columnas(self, matriz):
-		sumatoria = [0] * self.cant_entradas
-		for fila in matriz:
-			for j, valor in enumerate(fila):
-				sumatoria[j] = sumatoria[j] + valor
-		return sumatoria
-	
 	def entrenar_capa(self, deltas, learning_rate):
-		nuevos_deltas = []
+		sumatoria = [0] * self.cant_entradas
 		for neurona, delta in zip(self.neuronas, deltas):
-			#CALCULO LOS NUEVOS DELTAS PARA LA CAPA SIGUIENTE
-			#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
-			delta = neurona.generar_delta(delta)
-			#CALCULO LOS DELTAS PARA LA CAPA SIGUIENTE
-			#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
-			nuevos_deltas.append(neurona.generar_deltas_capa_siguiente(delta))
-			#CALCULO LOS NUEVOS PESOS
-			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
-			neurona.actualizar_pesos(delta, learning_rate)
-			#CALCULO LOS NUEVOS BIAS
-			#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
-			neurona.actualizar_bias(delta, learning_rate)
-			#print(neurona)
-		return self._sumar_columnas(nuevos_deltas)
+			deltas_neurona = neurona.entrenar(delta, learning_rate)
+			for i, valor in enumerate(deltas_neurona):
+				sumatoria[i] = sumatoria[i] + valor
+		return sumatoria

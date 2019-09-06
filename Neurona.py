@@ -17,9 +17,9 @@ class Neurona:
 		#return [0] * self.cant_entradas
 		
 	def _generar_bias(self):
-		return np.random.rand() * 2 - 1
+		#return np.random.rand() * 2 - 1
 		#return 1
-		#return 0
+		return 0
 	
 	def _generar_delta(self, delta):
 		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)

@@ -21,14 +21,6 @@ class Neurona:
 		#return 1
 		#return 0
 	
-	def procesar(self, entradas):
-		self.vector_x = entradas
-		self.z = self.b
-		for x, w in zip(self.vector_x, self.vector_w):
-			self.z = self.z + x * w
-		self.y = self.f_activ.evaluar(self.z)
-		return self.y
-	
 	def _generar_delta(self, delta):
 		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
 		return delta * self.f_activ.derivada(self.z)
@@ -44,8 +36,27 @@ class Neurona:
 	def _actualizar_bias(self, delta, learning_rate):
 		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
 		self.b = self.b - delta * learning_rate
-		
+	
+	def procesar(self, entradas):
+		'''
+		PROCESA LAS ENTRADAS RECIBIDAS POR LA NEURONA. DEVUELVE UN UNICO RESULTADO
+		PARAMETROS:
+			ENTRADAS: VECTOR CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD DEFINIDA AL CREAR LA NEURONA
+		'''
+		self.vector_x = entradas
+		self.z = self.b
+		for x, w in zip(self.vector_x, self.vector_w):
+			self.z = self.z + x * w
+		self.y = self.f_activ.evaluar(self.z)
+		return self.y
+	
 	def entrenar(self, delta, learning_rate):
+		'''
+		ENTRENA A LA NEURONA SEGUN CIERTO DELTA DADO Y LEARNING RATE
+		PARAMETROS:
+			DELTA: UN VALOR CON EL RESULTADO DE LAS DERIVADAS PARCIALES DE LAS CAPAS SIGUIENTES DE LA RED. (DOUBLE)
+			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
+		'''
 		nuevos_deltas = []
 		#GENERO EL DELTA DE ESTA CAPA
 		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)

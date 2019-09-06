@@ -189,8 +189,8 @@ def pruebas_neuronales():
 	print(rn.procesar([0.5,0.5]))
 	
 def main():
-	#pruebas_neuronales()
-	mnist_test()
+	pruebas_neuronales()
+	#mnist_test()
 	#test()
 	
 main()

@@ -33,6 +33,12 @@ class CapaNeuronal:
 		return vector_r
 	
 	def entrenar(self, deltas, learning_rate):
+		'''
+		ENTRENA A LAS NEURONAS DE LA CAPA SEGUN CIERTOS DELTAS DADOS Y LEARNING RATE
+		PARAMETROS:
+			DELTAS: UNA LISTA CON LOS RESULTADOS DE LAS DERIVADAS PARCIALES DE LAS CAPAS SIGUIENTES DE LA RED. DEBE HABER TANTAS COMO NEURONAS EN ESTA CAPA. (LIST(DOUBLES))
+			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
+		'''
 		sumatoria = [0] * self.cant_entradas
 		for neurona, delta in zip(self.neuronas, deltas):
 			deltas_neurona = neurona.entrenar(delta, learning_rate)

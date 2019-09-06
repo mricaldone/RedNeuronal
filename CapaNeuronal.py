@@ -32,7 +32,7 @@ class CapaNeuronal:
 			vector_r.append(neurona.procesar(entradas))
 		return vector_r
 	
-	def entrenar_capa(self, deltas, learning_rate):
+	def entrenar(self, deltas, learning_rate):
 		sumatoria = [0] * self.cant_entradas
 		for neurona, delta in zip(self.neuronas, deltas):
 			deltas_neurona = neurona.entrenar(delta, learning_rate)

@@ -74,7 +74,7 @@ class RedNeuronal:
 		self._entrenar_capas(deltas, learning_rate)
 		return self._calcular_tolerancia(valores_esperados, valores_obtenidos)
 		
-	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 10000, learning_rate = 0.5, tolerancia = 0):
+	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, learning_rate = 0.5, epochs = 10000, tolerancia = 0):
 		'''
 		ENTRENA A LA RED SEGUN UN CONJUNTO DE ENTRADAS Y SU CORRESPONDIENTE CONJUNTO DE VALORES ESPERADOS COMO RESULTADO. OPCIONALMENTE SE PUEDE INDICAR UN LEARNING RATE QUE MEJORA LA VELOCIDAD DE ENTRENAMIENTO.
 		PARAMETROS:

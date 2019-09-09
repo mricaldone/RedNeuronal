@@ -28,16 +28,6 @@ class RedNeuronal:
 			#LA PROXIMA CAPA TENDRA TANTAS ENTRADAS COMO NEURONAS EN LA CAPA ACTUAL
 			cant_entradas_de_la_capa = cant_neuronas
 		return capas
-	
-	def procesar(self, entradas):
-		'''
-		PROCESA LAS ENTRADAS A TRAVES DE LA RED. DEVUELVE UN VECTOR DE RESULTADOS (LA LONGITUD DEL VECTOR ES LA MISMA QUE LA CANTIDAD DE NEURONAS DE LA ULTIMA CAPA)
-		PARAMETROS:
-			ENTRADAS: VECTOR CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD ESPECIFICADA AL CREAR LA RED
-		'''
-		for capa in self.capas:
-			entradas = capa.procesar(entradas)
-		return entradas
 		
 	def _ultima_capa(self):
 		return self.capas[len(self.capas) - 1]
@@ -50,7 +40,7 @@ class RedNeuronal:
 	
 	def _entrenar_capas(self, deltas, learning_rate):
 		for capa in reversed(self.capas):
-			deltas = capa.entrenar_capa(deltas, learning_rate)
+			deltas = capa.entrenar(deltas, learning_rate)
 	
 	def _calcular_tolerancia(self, valores_esperados, valores_obtenidos):
 		tolerancias = []
@@ -58,17 +48,42 @@ class RedNeuronal:
 			tolerancias.append(abs(valor_obtenido - valor_esperado))
 		return max(tolerancias)
 	
+	def procesar(self, entradas):
+		'''
+		PROCESA LAS ENTRADAS A TRAVES DE LA RED. DEVUELVE UN VECTOR DE RESULTADOS (LA LONGITUD DEL VECTOR ES LA MISMA QUE LA CANTIDAD DE NEURONAS DE LA ULTIMA CAPA)
+		PARAMETROS:
+			ENTRADAS: LISTA CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD ESPECIFICADA AL CREAR LA RED
+		'''
+		for capa in self.capas:
+			entradas = capa.procesar(entradas)
+		return entradas
+	
 	def entrenar(self, entradas, valores_esperados, learning_rate = 0.01):
+		'''
+		ENTRENA A LA RED SEGUN CIERTAS ENTRADAS Y CON SUS CORRESPONDIENTES VALORES ESPERADOS COMO RESULTADO. OPCIONALMENTE SE PUEDE INDICAR UN LEARNING RATE QUE MEJORA LA VELOCIDAD DE ENTRENAMIENTO.
+		PARAMETROS:
+			ENTRADAS: LISTA CON LOS PARAMETROS DE ENTRADA ENTRE 0 Y 1 (LIST[DOUBLE])
+			VALORES ESPERADOS: LISTA DE RESULTADOS ESPERADOS ENTRE 0 Y 1 (LIST[DOUBLE])
+			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
+		'''
 		#PROCESO TODAS LAS ENTRADAS
 		valores_obtenidos = self.procesar(entradas)
-		#print('R',valores_obtenidos)
 		#APLICO LA DERIVADA DE LA FUNCION DE COSTE
 		deltas = self._aplicar_derivada_de_coste(valores_obtenidos, valores_esperados)
 		#ENTRENO LAS CAPAS DE ATRAS HACIA ADELANTE
 		self._entrenar_capas(deltas, learning_rate)
 		return self._calcular_tolerancia(valores_esperados, valores_obtenidos)
 		
-	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, epochs = 10000, learning_rate = 0.5, tolerancia = 0):
+	def entrenar_set(self, conjunto_de_entradas, conjunto_de_valores_esperados, learning_rate = 0.5, epochs = 10000, tolerancia = 0):
+		'''
+		ENTRENA A LA RED SEGUN UN CONJUNTO DE ENTRADAS Y SU CORRESPONDIENTE CONJUNTO DE VALORES ESPERADOS COMO RESULTADO. OPCIONALMENTE SE PUEDE INDICAR UN LEARNING RATE QUE MEJORA LA VELOCIDAD DE ENTRENAMIENTO.
+		PARAMETROS:
+			ENTRADAS: LISTA QUE CONTIENE CONJUNTOS DE LISTAS CON LOS PARAMETROS DE ENTRADA ENTRE 0 Y 1 (LIST[LIST[DOUBLE]])
+			VALORES ESPERADOS: LISTA QUE CONTIENE CONJUNTOS DE RESULTADOS ESPERADOS ENTRE 0 Y 1 (LIST[LIST[DOUBLE]])
+			EPOCHS: CANTIDAD MAXIMA DE ITERACIONES DE APRENDIZAJE (INT)
+			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
+			TOLERANCIA: VALOR MAXIMO DE ERROR ACEPTABLE. CUANDO SE ALCANZA ESTE VALOR PARA TODOS LOS CONJUNTOS DE ENTRADAS SE CORTAN LAS ITERACIONES. (DOUBLE)
+		'''
 		for i in range(epochs):
 			stop = True
 			for entradas, valores_esperados in zip(conjunto_de_entradas, conjunto_de_valores_esperados):

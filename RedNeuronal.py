@@ -85,8 +85,11 @@ class RedNeuronal:
 			TOLERANCIA: VALOR MAXIMO DE ERROR ACEPTABLE. CUANDO SE ALCANZA ESTE VALOR PARA TODOS LOS CONJUNTOS DE ENTRADAS SE CORTAN LAS ITERACIONES. (DOUBLE)
 		'''
 		for i in range(epochs):
+			j = 0
 			stop = True
 			for entradas, valores_esperados in zip(conjunto_de_entradas, conjunto_de_valores_esperados):
+				j += 1
+				print("Entrada " + str(j) + "/" + str(len(conjunto_de_entradas) * epochs) + '\r',end='')
 				if self.entrenar(entradas, valores_esperados, learning_rate) > tolerancia:
 					stop = False
 			if stop:

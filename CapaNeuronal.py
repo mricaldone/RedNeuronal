@@ -41,7 +41,5 @@ class CapaNeuronal:
 		'''
 		sumatoria = [0] * self.cant_entradas
 		for neurona, delta in zip(self.neuronas, deltas):
-			deltas_neurona = neurona.entrenar(delta, learning_rate)
-			for i, valor in enumerate(deltas_neurona):
-				sumatoria[i] = sumatoria[i] + valor
+			neurona.entrenar(delta, learning_rate, sumatoria)
 		return sumatoria

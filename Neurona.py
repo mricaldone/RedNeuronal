@@ -50,28 +50,26 @@ class Neurona:
 		self.y = self.f_activ.evaluar(self.z)
 		return self.y
 	
-	def entrenar(self, delta, learning_rate):
+	def entrenar(self, delta, learning_rate, nuevos_deltas):
 		'''
 		ENTRENA A LA NEURONA SEGUN CIERTO DELTA DADO Y LEARNING RATE
 		PARAMETROS:
 			DELTA: UN VALOR CON EL RESULTADO DE LAS DERIVADAS PARCIALES DE LAS CAPAS SIGUIENTES DE LA RED. (DOUBLE)
 			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
 		'''
-		nuevos_deltas = []
 		#GENERO EL DELTA DE ESTA CAPA
 		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
 		delta = self._generar_delta(delta)
 		for i in range(self.cant_entradas):
 			#CALCULO LOS DELTAS PARA LA CAPA SIGUIENTE
 			#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
-			nuevos_deltas.append(self._generar_delta_capa_siguiente(i, delta))
+			nuevos_deltas[i] += self._generar_delta_capa_siguiente(i, delta)
 			#CALCULO LOS NUEVOS PESOS
 			#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
 			self._actualizar_pesos(i, delta, learning_rate)
 		#CALCULO LOS NUEVOS BIAS
 		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
 		self._actualizar_bias(delta, learning_rate)
-		return nuevos_deltas
 		
 	def __str__(self):
 		precision = 1

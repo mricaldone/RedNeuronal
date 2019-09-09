@@ -89,8 +89,8 @@ def preprocesar_entradas(set_de_entradas):
 	return nuevas_entradas
 	
 def mnist_test():
-	LEARNING_RATE = 0.5
-	EPOCHS = 1
+	LEARNING_RATE = 1
+	EPOCHS = 2
 	TOLERANCIA = 0.05
 	F = Sigmoide()
 	mndata = MNIST('samples')
@@ -102,7 +102,7 @@ def mnist_test():
 	print("PRE-PROCESANDO ENTRADAS")
 	images = preprocesar_entradas(images)
 	print("GENERANDO RED NEURONAL")
-	rn = RedNeuronal(784, [100,10,1], F)
+	rn = RedNeuronal(784, [196,10,1], F)
 	#rn = RedNeuronal(784, [784,392,196,98,49,25,10,1], F)
 	print("ENTRENANDO")
 	print('EPOCHS', rn.entrenar_set(images, labels, LEARNING_RATE, EPOCHS, TOLERANCIA))

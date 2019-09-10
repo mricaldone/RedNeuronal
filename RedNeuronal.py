@@ -40,7 +40,7 @@ class RedNeuronal:
 	
 	def _entrenar_capas(self, deltas, learning_rate):
 		for capa in reversed(self.capas):
-			deltas = capa.entrenarRapido(deltas, learning_rate)
+			deltas = capa.entrenar(deltas, learning_rate)
 	
 	def _calcular_tolerancia(self, valores_esperados, valores_obtenidos):
 		tolerancias = []

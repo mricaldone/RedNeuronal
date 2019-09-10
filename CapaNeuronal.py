@@ -1,6 +1,5 @@
 from Neurona import *
-from concurrent.futures import ThreadPoolExecutor
-import threading
+from Subprocesos import *
 
 class CapaNeuronal:
 
@@ -50,8 +49,8 @@ class CapaNeuronal:
 		
 	def entrenarRapido(self, deltas, learning_rate):
 		sumatoria = [0] * self.cant_entradas
-		tpe = ThreadPoolExecutor(5)
+		subpr = Subprocesos()
 		for neurona, delta in zip(self.neuronas, deltas):
-			tpe.submit(neurona.entrenar, delta, learning_rate, sumatoria)
-		tpe.shutdown()
+			subpr.ejecutar(neurona.entrenar, [delta, learning_rate, sumatoria])
+		subpr.esperar()
 		return sumatoria

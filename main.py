@@ -145,7 +145,7 @@ def imprimir_grafico(rn, paso, cant_decimales):
 		
 def pruebas_neuronales():
 	LEARNING_RATE = 0.5
-	EPOCHS = 100000
+	EPOCHS = 10000
 	TOLERANCIA = 0.1
 	F = Sigmoide()
 	print('PRUEBA COMPUERTA AND')

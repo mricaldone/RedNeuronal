@@ -1,4 +1,6 @@
 from Neurona import *
+from concurrent.futures import ThreadPoolExecutor
+import threading
 
 class CapaNeuronal:
 
@@ -44,4 +46,12 @@ class CapaNeuronal:
 		sumatoria = [0] * self.cant_entradas
 		for neurona, delta in zip(self.neuronas, deltas):
 			neurona.entrenar(delta, learning_rate, sumatoria)
+		return sumatoria
+		
+	def entrenarRapido(self, deltas, learning_rate):
+		sumatoria = [0] * self.cant_entradas
+		tpe = ThreadPoolExecutor(5)
+		for neurona, delta in zip(self.neuronas, deltas):
+			tpe.submit(neurona.entrenar, delta, learning_rate, sumatoria)
+		tpe.shutdown()
 		return sumatoria

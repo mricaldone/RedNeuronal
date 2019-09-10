@@ -40,7 +40,7 @@ class RedNeuronal:
 	
 	def _entrenar_capas(self, deltas, learning_rate):
 		for capa in reversed(self.capas):
-			deltas = capa.entrenar(deltas, learning_rate)
+			deltas = capa.entrenarRapido(deltas, learning_rate)
 	
 	def _calcular_tolerancia(self, valores_esperados, valores_obtenidos):
 		tolerancias = []
@@ -84,8 +84,8 @@ class RedNeuronal:
 			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
 			TOLERANCIA: VALOR MAXIMO DE ERROR ACEPTABLE. CUANDO SE ALCANZA ESTE VALOR PARA TODOS LOS CONJUNTOS DE ENTRADAS SE CORTAN LAS ITERACIONES. (DOUBLE)
 		'''
+		j = 0
 		for i in range(epochs):
-			j = 0
 			stop = True
 			for entradas, valores_esperados in zip(conjunto_de_entradas, conjunto_de_valores_esperados):
 				j += 1
@@ -94,4 +94,5 @@ class RedNeuronal:
 					stop = False
 			if stop:
 				break
+		print()
 		return i + 1

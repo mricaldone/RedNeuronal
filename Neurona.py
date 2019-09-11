@@ -45,9 +45,7 @@ class Neurona:
 		COMPLEJIDAD: O(m) m:numero de entradas
 		'''
 		self.vector_x = entradas
-		self.z = self.b
-		for x, w in zip(self.vector_x, self.vector_w):
-			self.z += x * w
+		self.z = self.b + np.dot(self.vector_x, self.vector_w)
 		self.y = self.f_activ.evaluar(self.z)
 		return self.y
 	

@@ -3,6 +3,7 @@ from mnist import MNIST
 from PIL import Image
 import numpy as np
 import random
+import time
 
 def test():
 	LEARNING_RATE = 10
@@ -109,8 +110,10 @@ def mnist_test():
 	rn = RedNeuronal(784, [196,10,1], F)
 	#rn = RedNeuronal(784, [784,392,196,98,49,25,10,1], F)
 	print("ENTRENANDO")
+	start = time.time()
 	print('EPOCHS', rn.entrenar_set(images, labels, LEARNING_RATE, EPOCHS, TOLERANCIA))
-	
+	end = time.time()
+	print('TIEMPO TOTAL:',end - start)
 	print("CARGANDO DATOS DE PRUEBA")
 	images, labels = mndata.load_testing()
 	print("INICIANDO PRUEBA")

@@ -53,15 +53,19 @@ class CapaNeuronal:
 		'''
 		#GENERO EL DELTA DE ESTA CAPA
 		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
+		#ES DECIR D*A'
 		deltas = np.multiply(deltas, self.f_activacion.derivada(self.matriz_z))
 		#CALCULO LOS DELTAS PARA LA CAPA SIGUIENTE
 		#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
+		#ES DECIR D*W
 		matriz_d = np.multiply(deltas, self.matriz_w)
 		#CALCULO LOS NUEVOS PESOS
 		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
-		self.matriz_w -= (self.matriz_x @ deltas.T).T * learning_rate
+		#ES DECIR D*X^T*LR
+		self.matriz_w -= (deltas @ self.matriz_x.T) * learning_rate
 		#CALCULO LOS NUEVOS BIAS
 		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
+		#ES DECIR D*LR
 		self.matriz_b -= deltas * learning_rate
 		#EL RESULTADO ES LA SUMATORIA DE LOS ELEMENTOS DE CADA COLUMNA DE LA MATRIZ DE DELTAS
 		return matriz_d.sum(0).T

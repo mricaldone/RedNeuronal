@@ -1,5 +1,4 @@
 from Neurona import *
-from Subprocesos import *
 
 class CapaNeuronal:
 
@@ -45,12 +44,4 @@ class CapaNeuronal:
 		sumatoria = [0] * self.cant_entradas
 		for neurona, delta in zip(self.neuronas, deltas):
 			neurona.entrenar(delta, learning_rate, sumatoria)
-		return sumatoria
-		
-	def entrenarRapido(self, deltas, learning_rate):
-		sumatoria = [0] * self.cant_entradas
-		subpr = Subprocesos()
-		for neurona, delta in zip(self.neuronas, deltas):
-			subpr.ejecutar(neurona.entrenar, [delta, learning_rate, sumatoria])
-		subpr.esperar()
 		return sumatoria

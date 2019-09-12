@@ -92,6 +92,12 @@ class Neurona:
 		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
 		self.b -= delta * learning_rate
 		return nuevos_deltas
+	
+	def obtener_pesos(self):
+		return self.vector_w.tolist()
+		
+	def definir_pesos(self, pesos):
+		self.vector_w = pesos
 		
 	def __str__(self):
 		precision = 1

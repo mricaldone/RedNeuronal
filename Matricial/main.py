@@ -114,6 +114,8 @@ def mnist_test():
 	print('EPOCHS', rn.entrenar_set(images, labels, LEARNING_RATE, EPOCHS, TOLERANCIA))
 	end = time.time()
 	print('TIEMPO TOTAL:',end - start)
+	print('GUARDANDO DATOS DE LA RED')
+	rn.guardar('numeros')
 	print("CARGANDO DATOS DE PRUEBA")
 	images, labels = mndata.load_testing()
 	print("INICIANDO PRUEBA")
@@ -124,7 +126,24 @@ def mnist_test():
 		print(mndata.display(images[index]))
 		print("Esperado", labels[index])
 		print("Resultado:", round(r[0] * 10,0))
-		
+
+def mnist_test_cargar():
+	F = Sigmoide()
+	mndata = MNIST('samples')
+	print("GENERANDO RED NEURONAL")
+	rn = RedNeuronal(784, [196,10,1], F)
+	print('CARGANDO DATOS DE LA RED')
+	rn.cargar('numeros')
+	print("CARGANDO DATOS DE PRUEBA")
+	images, labels = mndata.load_testing()
+	print("INICIANDO PRUEBA")
+	while input("CONTINUAR? (Y/N):") != "N":
+		index = random.randrange(0, len(images))
+		imagen = preprocesar_entrada(images[index])
+		r = rn.procesar(imagen)
+		print(mndata.display(images[index]))
+		print("Esperado", labels[index])
+		print("Resultado:", round(r[0] * 10,0))	
 
 def imprimir_grafico(rn, paso, cant_decimales):
 	#w, h = 512, 512
@@ -207,8 +226,9 @@ def prueba_guardar_estado():
 	
 def main():
 	#pruebas_neuronales()
-	#mnist_test()
+	mnist_test()
+	mnist_test_cargar()
 	#test()
-	prueba_guardar_estado()
+	#prueba_guardar_estado()
 	
 main()

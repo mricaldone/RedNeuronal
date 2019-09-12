@@ -59,3 +59,13 @@ class CapaNeuronal:
 			nuevos_deltas = neurona.entrenarRapido(delta, learning_rate)
 			sumatoria = np.add(sumatoria, nuevos_deltas)
 		return sumatoria
+	
+	def obtener_pesos(self):
+		pesos = []
+		for neurona in self.neuronas:
+			pesos.append(neurona.obtener_pesos())
+		return pesos
+		
+	def definir_pesos(self, pesos):
+		for neurona,p in zip(self.neuronas, pesos):
+			neurona.definir_pesos(p)

@@ -40,7 +40,7 @@ class RedNeuronal:
 	
 	def _entrenar_capas(self, deltas, learning_rate):
 		for capa in reversed(self.capas):
-			deltas = capa.entrenar(deltas, learning_rate)
+			deltas = capa.entrenarRapido(deltas, learning_rate)
 	
 	def _calcular_tolerancia(self, valores_esperados, valores_obtenidos):
 		tolerancias = []
@@ -84,11 +84,28 @@ class RedNeuronal:
 			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
 			TOLERANCIA: VALOR MAXIMO DE ERROR ACEPTABLE. CUANDO SE ALCANZA ESTE VALOR PARA TODOS LOS CONJUNTOS DE ENTRADAS SE CORTAN LAS ITERACIONES. (DOUBLE)
 		'''
+		j = 0
 		for i in range(epochs):
 			stop = True
 			for entradas, valores_esperados in zip(conjunto_de_entradas, conjunto_de_valores_esperados):
+				j += 1
+				print("Entrada " + str(j) + "/" + str(len(conjunto_de_entradas) * epochs) + '\r',end='')
 				if self.entrenar(entradas, valores_esperados, learning_rate) > tolerancia:
 					stop = False
 			if stop:
 				break
+		print()
 		return i + 1
+
+	def guardar(self, nombre):
+		datos = []
+		for i,capa in enumerate(self.capas):
+			datos.append(capa.obtener_pesos())
+		with open(nombre + '.dat', "w") as archivo:
+			archivo.write(str(datos))
+			
+	def cargar(self, nombre):
+		with open(nombre + '.dat', "r") as archivo:
+			datos = eval(archivo.read())
+		for capa, pesos in zip(self.capas,datos):
+			capa.definir_pesos(pesos)

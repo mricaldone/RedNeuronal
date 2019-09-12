@@ -26,6 +26,7 @@ class CapaNeuronal:
 		PROCESA LAS ENTRADAS RECIBIDAS POR LA CAPA NEURONAL. DEVUELVE UN VECTOR DE RESULTADOS (LA LONGITUD DEL VECTOR ES LA MISMA QUE LA CANTIDAD DE NEURONAS DE LA CAPA)
 		PARAMETROS:
 			ENTRADAS: VECTOR CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD ESPECIFICADA AL CREAR LA CAPA
+		COMPLEJIDAD: O(n*m) n:numero de neuronas, m:numero de entradas
 		'''
 		vector_r = []
 		for neurona in self.neuronas:
@@ -38,10 +39,33 @@ class CapaNeuronal:
 		PARAMETROS:
 			DELTAS: UNA LISTA CON LOS RESULTADOS DE LAS DERIVADAS PARCIALES DE LAS CAPAS SIGUIENTES DE LA RED. DEBE HABER TANTAS COMO NEURONAS EN ESTA CAPA. (LIST(DOUBLES))
 			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
+		COMPLEJIDAD: O(n*m) n:numero de neuronas, m:numero de entradas
 		'''
 		sumatoria = [0] * self.cant_entradas
 		for neurona, delta in zip(self.neuronas, deltas):
-			deltas_neurona = neurona.entrenar(delta, learning_rate)
-			for i, valor in enumerate(deltas_neurona):
-				sumatoria[i] = sumatoria[i] + valor
+			neurona.entrenar(delta, learning_rate, sumatoria)
 		return sumatoria
+		
+	def entrenarRapido(self, deltas, learning_rate):
+		'''
+		ENTRENA A LAS NEURONAS DE LA CAPA SEGUN CIERTOS DELTAS DADOS Y LEARNING RATE
+		PARAMETROS:
+			DELTAS: UNA LISTA CON LOS RESULTADOS DE LAS DERIVADAS PARCIALES DE LAS CAPAS SIGUIENTES DE LA RED. DEBE HABER TANTAS COMO NEURONAS EN ESTA CAPA. (LIST(DOUBLES))
+			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
+		COMPLEJIDAD: O(n*m) n:numero de neuronas, m:numero de entradas
+		'''
+		sumatoria = [0] * self.cant_entradas
+		for neurona, delta in zip(self.neuronas, deltas):
+			nuevos_deltas = neurona.entrenarRapido(delta, learning_rate)
+			sumatoria = np.add(sumatoria, nuevos_deltas)
+		return sumatoria
+	
+	def obtener_pesos(self):
+		pesos = []
+		for neurona in self.neuronas:
+			pesos.append(neurona.obtener_pesos())
+		return pesos
+		
+	def definir_pesos(self, pesos):
+		for neurona,p in zip(self.neuronas, pesos):
+			neurona.definir_pesos(p)

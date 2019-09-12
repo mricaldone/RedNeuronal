@@ -3,6 +3,7 @@ from mnist import MNIST
 from PIL import Image
 import numpy as np
 import random
+import time
 
 def test():
 	LEARNING_RATE = 10
@@ -11,13 +12,17 @@ def test():
 	F = Sigmoide()
 	#F = Relu()
 	print('TEST RED NEURONAL')
+	print('PRUEBA 1')
 	rn = RedNeuronal(2, [1], F)
 	rn.entrenar([1,1],[0])
+	print('PRUEBA 2')
 	rn = RedNeuronal(4, [2,2,4], F)
 	rn.entrenar([1,1,1,1],[1,1,1,1])
+	print('PRUEBA 3')
 	rn = RedNeuronal(4, [4], F)
 	rn.entrenar([1,1,1,1],[1,1,1,1])
-	rn = RedNeuronal(1, [1], F)
+	print('PRUEBA 4')
+	rn = RedNeuronal(2, [1], F)
 	rn.entrenar([1,1],[1])
 	print('PRUEBA COMPUERTA YES')
 	rn = RedNeuronal(1, [1], F)
@@ -89,8 +94,8 @@ def preprocesar_entradas(set_de_entradas):
 	return nuevas_entradas
 	
 def mnist_test():
-	LEARNING_RATE = 0.5
-	EPOCHS = 1
+	LEARNING_RATE = 1
+	EPOCHS = 2
 	TOLERANCIA = 0.05
 	F = Sigmoide()
 	mndata = MNIST('samples')
@@ -102,11 +107,15 @@ def mnist_test():
 	print("PRE-PROCESANDO ENTRADAS")
 	images = preprocesar_entradas(images)
 	print("GENERANDO RED NEURONAL")
-	rn = RedNeuronal(784, [100,10,1], F)
+	rn = RedNeuronal(784, [196,10,1], F)
 	#rn = RedNeuronal(784, [784,392,196,98,49,25,10,1], F)
 	print("ENTRENANDO")
+	start = time.time()
 	print('EPOCHS', rn.entrenar_set(images, labels, LEARNING_RATE, EPOCHS, TOLERANCIA))
-	
+	end = time.time()
+	print('TIEMPO TOTAL:',end - start)
+	print('GUARDANDO DATOS DE LA RED')
+	rn.guardar('numeros')
 	print("CARGANDO DATOS DE PRUEBA")
 	images, labels = mndata.load_testing()
 	print("INICIANDO PRUEBA")
@@ -117,7 +126,24 @@ def mnist_test():
 		print(mndata.display(images[index]))
 		print("Esperado", labels[index])
 		print("Resultado:", round(r[0] * 10,0))
-		
+
+def mnist_test_cargar():
+	F = Sigmoide()
+	mndata = MNIST('samples')
+	print("GENERANDO RED NEURONAL")
+	rn = RedNeuronal(784, [196,10,1], F)
+	print('CARGANDO DATOS DE LA RED')
+	rn.cargar('numeros')
+	print("CARGANDO DATOS DE PRUEBA")
+	images, labels = mndata.load_testing()
+	print("INICIANDO PRUEBA")
+	while input("CONTINUAR? (Y/N):") != "N":
+		index = random.randrange(0, len(images))
+		imagen = preprocesar_entrada(images[index])
+		r = rn.procesar(imagen)
+		print(mndata.display(images[index]))
+		print("Esperado", labels[index])
+		print("Resultado:", round(r[0] * 10,0))	
 
 def imprimir_grafico(rn, paso, cant_decimales):
 	#w, h = 512, 512
@@ -145,7 +171,7 @@ def imprimir_grafico(rn, paso, cant_decimales):
 		
 def pruebas_neuronales():
 	LEARNING_RATE = 0.5
-	EPOCHS = 100000
+	EPOCHS = 10000
 	TOLERANCIA = 0.1
 	F = Sigmoide()
 	print('PRUEBA COMPUERTA AND')
@@ -187,10 +213,22 @@ def pruebas_neuronales():
 	print(rn.procesar([0.75,0.75]))
 	print(rn.procesar([1,0.5]))
 	print(rn.procesar([0.5,0.5]))
+
+def prueba_guardar_estado():
+	F = Sigmoide()
+	rn1 = RedNeuronal(2, [4,1,2], F)
+	r1 = rn1.procesar([0.5,3])
+	rn1.guardar('rn')
+	rn2 = RedNeuronal(2, [4,1,2], F)
+	rn2.cargar('rn')
+	r2 = rn2.procesar([0.5,3])
+	print(r1,r2)
 	
 def main():
 	#pruebas_neuronales()
 	mnist_test()
+	mnist_test_cargar()
 	#test()
+	#prueba_guardar_estado()
 	
 main()

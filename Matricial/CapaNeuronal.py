@@ -69,3 +69,9 @@ class CapaNeuronal:
 		self.matriz_b -= deltas * learning_rate
 		#EL RESULTADO ES LA SUMATORIA DE LOS ELEMENTOS DE CADA COLUMNA DE LA MATRIZ DE DELTAS
 		return matriz_d.sum(0).T
+
+	def obtener_pesos(self):
+		return self.matriz_w.A.tolist()
+		
+	def definir_pesos(self, pesos):
+		self.matriz_w = np.matrix(pesos)

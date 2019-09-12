@@ -100,3 +100,17 @@ class RedNeuronal:
 				break
 		print()
 		return i + 1
+		
+	def guardar(self, nombre):
+		datos = []
+		for i,capa in enumerate(self.capas):
+			datos.append(capa.obtener_pesos())
+		with open(nombre + '.dat', "w") as archivo:
+			archivo.write(str(datos))
+			
+	def cargar(self, nombre):
+		with open(nombre + '.dat', "r") as archivo:
+			datos = eval(archivo.read())
+		for capa, pesos in zip(self.capas,datos):
+			capa.definir_pesos(pesos)
+		

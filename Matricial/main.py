@@ -194,10 +194,21 @@ def pruebas_neuronales():
 	print(rn.procesar([0.75,0.75]))
 	print(rn.procesar([1,0.5]))
 	print(rn.procesar([0.5,0.5]))
+
+def prueba_guardar_estado():
+	F = Sigmoide()
+	rn1 = RedNeuronal(2, [4,1,2], F)
+	r1 = rn1.procesar([0.5,3])
+	rn1.guardar('rn')
+	rn2 = RedNeuronal(2, [4,1,2], F)
+	rn2.cargar('rn')
+	r2 = rn2.procesar([0.5,3])
+	print(r1,r2)
 	
 def main():
 	#pruebas_neuronales()
-	mnist_test()
+	#mnist_test()
 	#test()
+	prueba_guardar_estado()
 	
 main()

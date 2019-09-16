@@ -11,24 +11,31 @@ class Sigmoide:
 	
 class Tanh:
 	
-	def __init__(self):
-		self.e = 2.718281828459045235360
-	
 	def evaluar(self, x):
-		e = self.e
-		return (e**x - e**-x) / (e**x + e**-x)
+		return np.tanh(x)
 	
 	def derivada(self, x):
 		tanh = self.evaluar(x)
-		return 1 - tanh * tanh
+		return 1 -  np.multiply(tanh, tanh)
 		
 class Relu:
 	
 	def evaluar(self, x):
-		return x if  x > 0 else 0
+		return np.where(x > 0, x, 0)
 	
 	def derivada(self, x):
-		return 1 if x > 0 else 0
+		return np.where(x > 0, 1, 0)
+	
+class LeakyRelu:
+	
+	def __init__(self, coeficiente):
+		self.a = coeficiente
+	
+	def evaluar(self, x):
+		return np.where(x > 0, self.a * x, 0)
+	
+	def derivada(self, x):
+		return np.where(x > 0, self.a, 0)
 	
 class ErrorCuadraticoMedio:
 	

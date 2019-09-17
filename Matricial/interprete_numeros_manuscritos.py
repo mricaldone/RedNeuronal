@@ -9,6 +9,9 @@ MNDATA = MNIST('samples')
 F = Sigmoide()
 N_ENTRADAS = 784
 CAPAS = [196,10,1]
+LEARNING_RATE = 1
+EPOCHS = 2
+TOLERANCIA = 0.05
 	
 def si_no_prompt(texto):
 	opc_si = ['s','S']
@@ -44,9 +47,6 @@ def preprocesar_entradas(set_de_entradas):
 	return nuevas_entradas
 
 def crear_red(rn):
-	LEARNING_RATE = 1
-	EPOCHS = 2
-	TOLERANCIA = 0.05
 	print("CARGANDO DATOS DE ENTRENAMIENTO")
 	images, labels = MNDATA.load_training()
 	print("PRE-PROCESANDO SALIDAS")
@@ -86,6 +86,7 @@ def mostrar_prueba(images, labels, rn):
 		print("Resultado:", val_obtenido)
 		if val_esperado != val_obtenido:
 			print('Fallo')
+			rn.entrenar(imagen, [val_esperado / 10], LEARNING_RATE)
 		else:
 			print('Correcto')
 

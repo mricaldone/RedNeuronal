@@ -1,11 +1,11 @@
 import numpy as np
 
-from CapaNeuronal import *
-from Funciones import *
+from .CapaNeuronal import *
+from .Funciones import *
 
 class RedNeuronal:
 	
-	def __init__(self, cant_entradas, estructura, f_activacion):
+	def __init__(self, cant_entradas, estructura, f_activacion = Sigmoide()):
 		'''
 		CONSTRUCTOR DE LA RED NEURONAL
 		PARAMETROS:
@@ -105,11 +105,11 @@ class RedNeuronal:
 		datos = []
 		for i,capa in enumerate(self.capas):
 			datos.append(capa.obtener_pesos())
-		with open(nombre + '.dat', "w") as archivo:
+		with open(nombre, "w") as archivo:
 			archivo.write(str(datos))
 			
 	def cargar(self, nombre):
-		with open(nombre + '.dat', "r") as archivo:
+		with open(nombre, "r") as archivo:
 			datos = eval(archivo.read())
 		for capa, pesos in zip(self.capas,datos):
 			capa.definir_pesos(pesos)

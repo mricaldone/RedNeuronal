@@ -1,4 +1,4 @@
-from Neurona import *
+from .Neurona import *
 
 class CapaNeuronal:
 

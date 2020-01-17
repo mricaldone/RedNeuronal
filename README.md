@@ -1,25 +1,25 @@
 # RED NEURONAL
 
-Este es un modelo muy basico (aunque no menos potente) de una red neuronal. 
+Éste es un modelo (TDA) muy básico (aunque no menos potente) de una red neuronal. 
 
 ## INFORMACIÓN PREVIA
 
-Este paquete contiene dos versiones de una red neuronal, una orientada a objetos que se encuentra dentro de la carpeta 'OO' y otra matricial que se encuentra en la raiz del proyecto. La version matricial es mucho mas rapida ya que utiliza varios nucleos del procesador para realizar las operaciones, esto es gracias a la libreria numpy que debe ser previamente instalada utilizando:
+Éste paquete contiene dos versiones de una red neuronal, una orientada a objetos que se encuentra dentro de la carpeta 'OO' y otra matricial que se encuentra en la raiz del proyecto. La versión matricial es mucho más rápida ya que utiliza varios núcleos del procesador para realizar las operaciones, esto es gracias a la librería numpy que debe ser previamente instalada utilizando:
 ```
 pip3 install numpy
 ```
-Por otro lado la versión orientada a objetos no requiere numpy y el código es mas legible. Sin embargo es mucho mas lenta.
+Por otro lado la versión orientada a objetos no requiere numpy y el código es mas legible. Sin embargo es mucho más lenta.
 
 ## INSTALACIÓN (VERSIÓN MATRICIAL)
 
-Instalar la libreria numpy. Colocar la carpeta RedNeuronal en la raiz del proyecto. Finalmente, importar al proyecto utilizando:
+Instalar la librería numpy. Colocar la carpeta RedNeuronal en la raíz del proyecto. Finalmente, importar al proyecto utilizando:
 ```
 from RedNeuronal.RedNeuronal import *
 ```
 
 ## INSTALACIÓN (VERSION O.O.)
 
-Colocar la carpeta RedNeuronal en la raiz del proyecto. Finalmente, importar al proyecto utilizando:
+Colocar la carpeta RedNeuronal en la raíz del proyecto. Finalmente, importar al proyecto utilizando:
 ```
 from RedNeuronal.OO.RedNeuronal import *
 ```
@@ -28,33 +28,33 @@ from RedNeuronal.OO.RedNeuronal import *
 
 ### Crear estructura de la red
 
-La red neuronal consiste en un conjunto de capas de neuronas en donde cada neurona de una capa se conecta con todas las neuronas de la siguiente. Para esto necesitamos pasarle la informacion respecto de la cantidad de entradas y la estructura al constructor. Ademas se puede definir la funcion de activación de manera optativa. La funcion de activación por defecto es la sigmoidea. El prototipo es el siguiente:
+La red neuronal consiste en un conjunto de capas de neuronas en dónde cada neurona de una capa se conecta con todas las neuronas de la siguiente. Para esto necesitamos pasarle la información respecto de la cantidad de entradas y la estructura al constructor. Además se puede definir la función de activación de manera optativa. La función de activación por defecto es la sigmoidea. El prototipo es el siguiente:
 ```
 RedNeuronal(cant_entradas, estructura, f_activacion = Sigmoide())
 ```
-Donde cant_entradas es un numero entero que posee la cantidad de entradas de la red y estructura es una lista donde cada elemento es un entero que indica la cantidad de neuronas por capa. Adicionalmente se puede definir una funcion de activacion del archivo Funciones.py.
+Dónde *cant_entradas* es un número entero que posee la cantidad de entradas de la red y *estructura* es una lista donde cada elemento es un entero que indica la cantidad de neuronas por capa. Adicionalmente se puede definir en *f_activacion* una función de activación del archivo Funciones.py.
 
 Un ejemplo de uso podría ser:
 ```
 RedNeuronal(2500, [2500,70,2])
 ```
-En este tipo particular la cantidad de entradas es 2500, la cantidad de neuronas de la primer capa es 2500, para la segunda 70 y finalmente para la tercera 2. Además la funcion de activación es la sigmoide.
-Cabe destacar que la red tiene tantas salidas como neuronas en la ultima capa. Para el ejemplo, la cantidad de salidas es dos.
+En este tipo particular la cantidad de entradas es 2500, la cantidad de neuronas de la primer capa es 2500, para la segunda 70 y finalmente para la tercera 2. Además la función de activación es la sigmoide.
+Cabe destacar que la red tiene tantas salidas como neuronas en la última capa. Para el ejemplo, la cantidad de salidas es dos.
 
 ### Entrenar red
 
 El entrenamiento de la red consiste en indicarle a la red la salida deseada para una entrada determinada.
-Para entrenar la red se utiliza el metodo:
+Para entrenar la red se utiliza el método:
 ```
 entrenar(entradas, valores_esperados, learning_rate = 0.01):
 ```
-Dónde 'entradas' es una lista en la cual cada elemento contiene un valor para cada entrada de la red; 'valores_esperados' es una lista donde cada elemento es la salida deseada; y 'learning_rate' es la velocidad de entrenamiento.
+Dónde *entradas* es una lista en la cual cada elemento contiene un valor para cada entrada de la red; *valores_esperados* es una lista donde cada elemento es la salida deseada; y *learning_rate* es la velocidad de entrenamiento.
 Por ejemplo:
 ```
 rn = RedNeuronal(4,[4,2])
 rn.entrenar([0.5, 0.7, 1, 0.5],[1, 0])
 ```
-El método entrenar no devuelve ningun valor. Lo que logra es modificar las veriables internas de la red para que a partir de las entradas dadas el resultado sea el mas aproximado.
+El método entrenar no devuelve ningun valor. Lo que logra es modificar las variables internas de la red para que a partir de las entradas dadas el resultado sea el mas aproximado.
 
 ### Procesar entradas
 
@@ -62,7 +62,7 @@ Una vez entrenada la red es necesario verificar que el entrenamiento fue el adec
 ```
 procesar(entradas)
 ```
-Donde 'entradas' es una lista en la cual cada elemento representa un valor de entrada de la red. Este metodo devuelve una lista donde cada elemento es el valor de salida de la red. Recuerde que la lista de salida tendrá tantos elementos como neuronas en la ultima capa de la red.
+Donde *entradas* es una lista en la cual cada elemento representa un valor de entrada de la red. Este método devuelve una lista donde cada elemento es el valor de salida de la red. Recuerde que la lista de salida tendrá tantos elementos como neuronas en la última capa de la red.
 Ejemplo:
 ```
 rn = RedNeuronal(4,[4,2])
@@ -70,15 +70,15 @@ rn = RedNeuronal(4,[4,2])
 resultado = rn.procesar([0.4, 0.2, 0.2, 0.5])
 print(resultado)
 ```
-Debe tener en cuenta que procesar las entradas en una red sin entrenamiento devolverá un resultado totalmente aleatorio.
+Débe tener en cuenta que procesar las entradas en una red sín entrenamiento devolverá un resultado totalmente aleatorio.
 
 ### Guardar y Cargar
 Es posible guardar el estado de la red utilizando el metodo guardar.
 ```
 guardar(nombre_archivo)
 ```
-Donde 'nombre_archivo' es el nombre del archivo donde se almacenarán los datos.
-Para cargar estos datos se utiliza el metodo cargar, que es analogo al anterior.
+Dónde 'nombre_archivo' es el nombre del archivo donde se almacenarán los datos.
+Para cargar estos datos se utiliza el metodo cargar, que es análogo al anterior.
 ```
 cargar(nombre_archivo)
 ```
@@ -93,7 +93,7 @@ print(resultado)
 ```
 Es importante que la estructura de la red que carga los datos sea la misma que la de la red que los graba.
 
-### Otras funciones de activacion
+### Otras funciones de activación
 Los siguientes son los prototipos de las funciones de activación disponibles en el archivo Funciones.py:
 ```
 Sigmoide()

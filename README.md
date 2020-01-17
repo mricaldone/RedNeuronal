@@ -4,15 +4,14 @@
 
 ## INFORMACIÓN PREVIA
 
-Éste paquete contiene dos versiones de una red neuronal, una orientada a objetos que se encuentra dentro de la carpeta 'OO' y otra matricial que se encuentra en la raíz del proyecto. La versión matricial es mucho más rápida ya que utiliza varios núcleos del procesador para realizar las operaciones, esto es gracias a la librería numpy que debe ser previamente instalada utilizando:
-```
-pip3 install numpy
-```
-Por otro lado la versión orientada a objetos no requiere numpy y el código es más legible. Sin embargo es mucho más lenta.
+Éste paquete contiene dos versiones de una red neuronal, una orientada a objetos que se encuentra dentro de la carpeta 'OO' y otra matricial que se encuentra en la raíz del proyecto. La versión matricial es mucho más rápida ya que utiliza varios núcleos del procesador para realizar las operaciones, esto es gracias a la librería numpy que debe ser previamente instalada. Por otro lado la versión orientada a objetos no requiere numpy y el código es más legible. Sin embargo es mucho más lenta.
 
 ## INSTALACIÓN (VERSIÓN MATRICIAL)
 
-1. Instalar la librería numpy. 
+1. Instalar la librería numpy.
+```
+pip3 install numpy
+```
 1. Colocar la carpeta RedNeuronal en la raíz del proyecto.
 1. Finalmente, importar al proyecto utilizando:
 ```

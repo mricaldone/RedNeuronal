@@ -12,14 +12,17 @@ Por otro lado la versión orientada a objetos no requiere numpy y el código es 
 
 ## INSTALACIÓN (VERSIÓN MATRICIAL)
 
-Instalar la librería numpy. Colocar la carpeta RedNeuronal en la raíz del proyecto. Finalmente, importar al proyecto utilizando:
+1. Instalar la librería numpy. 
+1. Colocar la carpeta RedNeuronal en la raíz del proyecto.
+1. Finalmente, importar al proyecto utilizando:
 ```
 from RedNeuronal.RedNeuronal import *
 ```
 
 ## INSTALACIÓN (VERSION O.O.)
 
-Colocar la carpeta RedNeuronal en la raíz del proyecto. Finalmente, importar al proyecto utilizando:
+1. Colocar la carpeta RedNeuronal en la raíz del proyecto.
+1. Importar al proyecto utilizando:
 ```
 from RedNeuronal.OO.RedNeuronal import *
 ```
@@ -103,10 +106,10 @@ Relu()
 Tenga en cuenta que todas las capas utilizan la misma función de activación que fue definida en el constructor de la red. Además tenga en cuenta que la imagen de la salida dependerá de la función de activación utilizada. Por ejemplo para la sigmoide la imagen es [0;1], para tanh [-1;1] y para relu [0;inf].
 
 ## BUENAS PRÁCTICAS
-Las entradas deben estar normalizadas.
-Las salidas deben ser normalizadas.
-Es recomendable utilizar la misma cantidad de neuronas en la primer capa que de entradas a la red.
-Los datasets deben ser entrenados de manera completa. Cada vez que se recorre un dataset se llama epoca. Una baja cantidad de epocas provoca underfitting y una alta cantidad de epocas puede provocar overfitting.
-Un learning rate muy alto puede provocar que nunca se alcanze el resultado adecuado. Un learning rate muy bajo puede provocar la necesidad de utilizar mas epocas.
-Es importante que los datasets posean la mayor cantidad de datos variados para que la generalizacion sea mayor.
-Para probar que la red no esta memorizando en lugar de aprender, no se deben utilizar los mismos datos de prueba que de entrenamiento.
+* Las entradas deben estar normalizadas. Es recomendable pre-procesar las entradas según la función de activación utilizada.
+* Las salidas utilizadas durante el entrenamiento deben estar dentro del codominio de la función de activación. Por lo tanto deben ser pre-procesadas. Adicionalmente, las salidas de la red deben ser post-procesadas de manera inversa al pre-procesamiento del entrenamiento.
+* Es recomendable utilizar la misma cantidad de neuronas en la primer capa que de entradas a la red.
+* Los datasets deben ser entrenados de manera completa. Cada vez que se recorre un dataset se llama epoca. Una baja cantidad de epocas provoca underfitting y una alta cantidad de epocas puede provocar overfitting.
+* Un learning rate muy alto puede provocar que nunca se alcanze el resultado adecuado. Un learning rate muy bajo puede provocar la necesidad de utilizar mas epocas.
+* Es importante que los datasets posean la mayor cantidad de datos variados para que la red aprenda a generalizar.
+* Para probar que la red no esta memorizando en lugar de generalizar, no se deben utilizar los mismos datos de prueba que de entrenamiento. Es recomendable utilizar el 80% de los datos disponibles para entrenamiento y el 20% para realizar pruebas.

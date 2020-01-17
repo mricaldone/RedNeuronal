@@ -2,7 +2,7 @@
 
 Este es un modelo muy basico (aunque no menos potente) de una red neuronal. 
 
-## Información previa
+## INFORMACIÓN PREVIA
 
 Este paquete contiene dos versiones de una red neuronal, una orientada a objetos que se encuentra dentro de la carpeta 'OO' y otra matricial que se encuentra en la raiz del proyecto. La version matricial es mucho mas rapida ya que utiliza varios nucleos del procesador para realizar las operaciones, esto es gracias a la libreria numpy que debe ser previamente instalada utilizando:
 ```
@@ -10,21 +10,21 @@ pip3 install numpy
 ```
 Por otro lado la versión orientada a objetos no requiere numpy y el código es mas legible. Sin embargo es mucho mas lenta.
 
-## Instalación (Versión Matricial)
+## INSTALACIÓN (VERSIÓN MATRICIAL)
 
 Instalar la libreria numpy. Colocar la carpeta RedNeuronal en la raiz del proyecto. Finalmente, importar al proyecto utilizando:
 ```
 from RedNeuronal.RedNeuronal import *
 ```
 
-## Instalación (Versión O.O.)
+## INSTALACIÓN (VERSION O.O.)
 
 Colocar la carpeta RedNeuronal en la raiz del proyecto. Finalmente, importar al proyecto utilizando:
 ```
 from RedNeuronal.OO.RedNeuronal import *
 ```
 
-## Modo de uso
+## MODO DE USO
 
 ### Crear estructura de la red
 
@@ -102,7 +102,7 @@ Relu()
 ```
 Tenga en cuenta que todas las capas utilizan la misma función de activación que fue definida en el constructor de la red. Además tenga en cuenta que la imagen de la salida dependerá de la función de activación utilizada. Por ejemplo para la sigmoide la imagen es [0;1], para tanh [-1;1] y para relu [0;inf].
 
-## Buenas practicas
+## BUENAS PRÁCTICAS
 Las entradas deben estar normalizadas.
 Las salidas deben ser normalizadas.
 Es recomendable utilizar la misma cantidad de neuronas en la primer capa que de entradas a la red.

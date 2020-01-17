@@ -4,11 +4,11 @@
 
 ## INFORMACIÓN PREVIA
 
-Éste paquete contiene dos versiones de una red neuronal, una orientada a objetos que se encuentra dentro de la carpeta 'OO' y otra matricial que se encuentra en la raiz del proyecto. La versión matricial es mucho más rápida ya que utiliza varios núcleos del procesador para realizar las operaciones, esto es gracias a la librería numpy que debe ser previamente instalada utilizando:
+Éste paquete contiene dos versiones de una red neuronal, una orientada a objetos que se encuentra dentro de la carpeta 'OO' y otra matricial que se encuentra en la raíz del proyecto. La versión matricial es mucho más rápida ya que utiliza varios núcleos del procesador para realizar las operaciones, esto es gracias a la librería numpy que debe ser previamente instalada utilizando:
 ```
 pip3 install numpy
 ```
-Por otro lado la versión orientada a objetos no requiere numpy y el código es mas legible. Sin embargo es mucho más lenta.
+Por otro lado la versión orientada a objetos no requiere numpy y el código es más legible. Sin embargo es mucho más lenta.
 
 ## INSTALACIÓN (VERSIÓN MATRICIAL)
 
@@ -19,7 +19,7 @@ Por otro lado la versión orientada a objetos no requiere numpy y el código es 
 from RedNeuronal.RedNeuronal import *
 ```
 
-## INSTALACIÓN (VERSION O.O.)
+## INSTALACIÓN (VERSIÓN O.O.)
 
 1. Colocar la carpeta RedNeuronal en la raíz del proyecto.
 1. Importar al proyecto utilizando:
@@ -31,7 +31,7 @@ from RedNeuronal.OO.RedNeuronal import *
 
 ### Crear estructura de la red
 
-La red neuronal consiste en un conjunto de capas de neuronas en dónde cada neurona de una capa se conecta con todas las neuronas de la siguiente. Para esto necesitamos pasarle la información respecto de la cantidad de entradas y la estructura al constructor. Además se puede definir la función de activación de manera optativa. La función de activación por defecto es la sigmoidea. El prototipo es el siguiente:
+La red neuronal consiste en un conjunto de capas de neuronas en donde cada neurona de una capa se conecta con todas las neuronas de la siguiente. Para esto necesitamos pasarle la información respecto de la cantidad de entradas y la estructura al constructor. Además se puede definir la función de activación de manera optativa. La función de activación por defecto es la sigmoidea. El prototipo es el siguiente:
 ```
 RedNeuronal(cant_entradas, estructura, f_activacion = Sigmoide())
 ```
@@ -57,11 +57,11 @@ Por ejemplo:
 rn = RedNeuronal(4,[4,2])
 rn.entrenar([0.5, 0.7, 1, 0.5],[1, 0])
 ```
-El método entrenar no devuelve ningun valor. Lo que logra es modificar las variables internas de la red para que a partir de las entradas dadas el resultado sea el mas aproximado.
+El método *entrenar* no devuelve ningún valor. Lo que logra es modificar las variables internas de la red para que a partir de las entradas dadas el resultado sea el más aproximado.
 
 ### Procesar entradas
 
-Una vez entrenada la red es necesario verificar que el entrenamiento fue el adecuado. Esto lo hacemos mediante el metodo procesar.
+Una vez entrenada la red es necesario verificar que el entrenamiento fue el adecuado. Esto lo hacemos mediante el método procesar.
 ```
 procesar(entradas)
 ```
@@ -73,10 +73,10 @@ rn = RedNeuronal(4,[4,2])
 resultado = rn.procesar([0.4, 0.2, 0.2, 0.5])
 print(resultado)
 ```
-Débe tener en cuenta que procesar las entradas en una red sín entrenamiento devolverá un resultado totalmente aleatorio.
+Debe tener en cuenta que procesar las entradas en una red sín entrenamiento devolverá un resultado totalmente aleatorio.
 
 ### Guardar y Cargar
-Es posible guardar el estado de la red utilizando el metodo guardar.
+Es posible guardar el estado de la red utilizando el método guardar.
 ```
 guardar(nombre_archivo)
 ```
@@ -109,7 +109,7 @@ Tenga en cuenta que todas las capas utilizan la misma función de activación qu
 * Las entradas deben estar normalizadas. Es recomendable pre-procesar las entradas según la función de activación utilizada.
 * Las salidas utilizadas durante el entrenamiento deben estar dentro del codominio de la función de activación. Por lo tanto deben ser pre-procesadas. Adicionalmente, las salidas de la red deben ser post-procesadas de manera inversa al pre-procesamiento del entrenamiento.
 * Es recomendable utilizar la misma cantidad de neuronas en la primer capa que de entradas a la red.
-* Los datasets deben ser entrenados de manera completa. Cada vez que se recorre un dataset se llama epoca. Una baja cantidad de epocas provoca underfitting y una alta cantidad de epocas puede provocar overfitting.
-* Un learning rate muy alto puede provocar que nunca se alcanze el resultado adecuado. Un learning rate muy bajo puede provocar la necesidad de utilizar mas epocas.
+* Los datasets deben ser entrenados de manera completa. Cada vez que se recorre un dataset se llama época. Una baja cantidad de épocas provoca underfitting y una alta cantidad de épocas puede provocar overfitting.
+* Un learning rate muy alto puede provocar que nunca se alcance el resultado adecuado. Un learning rate muy bajo puede provocar la necesidad de utilizar más epocas.
 * Es importante que los datasets posean la mayor cantidad de datos variados para que la red aprenda a generalizar.
-* Para probar que la red no esta memorizando en lugar de generalizar, no se deben utilizar los mismos datos de prueba que de entrenamiento. Es recomendable utilizar el 80% de los datos disponibles para entrenamiento y el 20% para realizar pruebas.
+* Para probar que la red no está memorizando en lugar de generalizar, no se deben utilizar los mismos datos de prueba que de entrenamiento. Es recomendable utilizar el 80% de los datos disponibles para entrenamiento y el 20% para realizar pruebas.

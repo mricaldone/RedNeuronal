@@ -1,4 +1,4 @@
-from .Neurona import *
+import numpy as np
 
 class CapaNeuronal:
 
@@ -12,14 +12,19 @@ class CapaNeuronal:
 		'''
 		self.cant_entradas = cant_entradas
 		self.cant_neuronas = cant_neuronas
-		self.neuronas = self._generar_neuronas(f_activacion)
+		self.f_activacion = f_activacion
+		self.matriz_w = self._generar_matriz_de_pesos()
+		self.matriz_b = self._generar_matriz_de_bias()
+		self_matriz_x = None
+		self.matriz_z = None
+		self.matriz_y = None
 		return
 
-	def _generar_neuronas(self, f_activacion):
-		neuronas = []
-		for i in range(self.cant_neuronas):
-			neuronas.append(Neurona(self.cant_entradas, f_activacion))
-		return neuronas
+	def _generar_matriz_de_pesos(self):
+		return np.matrix(np.random.rand(self.cant_neuronas, self.cant_entradas) * 2 - 1)
+		
+	def _generar_matriz_de_bias(self):
+		return np.matrix(np.zeros((self.cant_neuronas, 1)))
 			
 	def procesar(self, entradas):
 		'''
@@ -28,10 +33,15 @@ class CapaNeuronal:
 			ENTRADAS: VECTOR CON LOS PARAMETROS DE ENTRADA, DEBE SER DE LA LONGITUD ESPECIFICADA AL CREAR LA CAPA
 		COMPLEJIDAD: O(n*m) n:numero de neuronas, m:numero de entradas
 		'''
-		vector_r = []
-		for neurona in self.neuronas:
-			vector_r.append(neurona.procesar(entradas))
-		return vector_r
+		#GUARDAMOS EL VECTOR X (ES DE Nx1)
+		self.matriz_x = entradas
+		#GENERAMOS EL VECTOR Z (ES DE Nx1)
+		#HACEMOS WX=Z
+		self.matriz_z = (self.matriz_w @ self.matriz_x) + self.matriz_b
+		#GENERAMOS EL VECTOR Y (ES DE Nx1)
+		#HACEMOS f(Z)=Y
+		self.matriz_y = self.f_activacion.evaluar(self.matriz_z)
+		return self.matriz_y
 	
 	def entrenar(self, deltas, learning_rate):
 		'''
@@ -41,31 +51,27 @@ class CapaNeuronal:
 			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
 		COMPLEJIDAD: O(n*m) n:numero de neuronas, m:numero de entradas
 		'''
-		sumatoria = [0] * self.cant_entradas
-		for neurona, delta in zip(self.neuronas, deltas):
-			neurona.entrenar(delta, learning_rate, sumatoria)
-		return sumatoria
-		
-	def entrenarRapido(self, deltas, learning_rate):
-		'''
-		ENTRENA A LAS NEURONAS DE LA CAPA SEGUN CIERTOS DELTAS DADOS Y LEARNING RATE
-		PARAMETROS:
-			DELTAS: UNA LISTA CON LOS RESULTADOS DE LAS DERIVADAS PARCIALES DE LAS CAPAS SIGUIENTES DE LA RED. DEBE HABER TANTAS COMO NEURONAS EN ESTA CAPA. (LIST(DOUBLES))
-			LEARNING_RATE: VELOCIDAD DE APRENDIZAJE. UN LR ALTO IMPLICA UNA MAYOR VELOCIDAD PARA ENCONTRAR EL RESULTADO, SIN EMBARGO PUEDE NO LLEGAR AL RESULTADO OPTIMO. (DOUBLE)
-		COMPLEJIDAD: O(n*m) n:numero de neuronas, m:numero de entradas
-		'''
-		sumatoria = [0] * self.cant_entradas
-		for neurona, delta in zip(self.neuronas, deltas):
-			nuevos_deltas = neurona.entrenarRapido(delta, learning_rate)
-			sumatoria = np.add(sumatoria, nuevos_deltas)
-		return sumatoria
-	
+		#GENERO EL DELTA DE ESTA CAPA
+		#LOS NUEVOS DELTAS SE CALCULAN COMO d = d * (da/dz) = d * a´(z)
+		#ES DECIR D*A'
+		deltas = np.multiply(deltas, self.f_activacion.derivada(self.matriz_z))
+		#CALCULO LOS DELTAS PARA LA CAPA SIGUIENTE
+		#LOS DELTAS SIGUIENTES SE CALCULAN COMO d = d * (dz/dx) = d * w
+		#ES DECIR D*W
+		matriz_d = np.multiply(deltas, self.matriz_w)
+		#CALCULO LOS NUEVOS PESOS
+		#LOS NUEVOS PESOS SE CALCULAN COMO W = W - (dC/dw) * LR = W - deltas * (dz/dw) * LR = W - deltas * entradas * LR
+		#ES DECIR D*X^T*LR
+		self.matriz_w -= (deltas @ self.matriz_x.T) * learning_rate
+		#CALCULO LOS NUEVOS BIAS
+		#LOS NUEVOS BIAS SE CALCULAN COMO b = b - (dC/db) * LR = b - deltas * (dz/db) * LR = b - deltas * 1 * LR
+		#ES DECIR D*LR
+		self.matriz_b -= deltas * learning_rate
+		#EL RESULTADO ES LA SUMATORIA DE LOS ELEMENTOS DE CADA COLUMNA DE LA MATRIZ DE DELTAS
+		return matriz_d.sum(0).T
+
 	def obtener_pesos(self):
-		pesos = []
-		for neurona in self.neuronas:
-			pesos.append(neurona.obtener_pesos())
-		return pesos
+		return self.matriz_w.A.tolist()
 		
 	def definir_pesos(self, pesos):
-		for neurona,p in zip(self.neuronas, pesos):
-			neurona.definir_pesos(p)
+		self.matriz_w = np.matrix(pesos)

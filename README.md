@@ -12,8 +12,8 @@
 ```
 pip3 install numpy
 ```
-1. Colocar la carpeta RedNeuronal en la raíz del proyecto.
-1. Finalmente, importar al proyecto utilizando:
+2. Colocar la carpeta RedNeuronal en la raíz del proyecto.
+3. Finalmente, importar al proyecto utilizando:
 ```
 from RedNeuronal.RedNeuronal import *
 ```
@@ -21,7 +21,7 @@ from RedNeuronal.RedNeuronal import *
 ## INSTALACIÓN (VERSIÓN O.O.)
 
 1. Colocar la carpeta RedNeuronal en la raíz del proyecto.
-1. Importar al proyecto utilizando:
+2. Importar al proyecto utilizando:
 ```
 from RedNeuronal.OO.RedNeuronal import *
 ```

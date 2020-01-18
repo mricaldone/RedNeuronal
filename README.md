@@ -105,7 +105,7 @@ Relu()
 Tenga en cuenta que todas las capas utilizan la misma función de activación que fue definida en el constructor de la red. Además tenga en cuenta que la imagen de la salida dependerá de la función de activación utilizada. Por ejemplo para la sigmoide la imagen es [0;1], para tanh [-1;1] y para relu [0;inf].
 
 ## BUENAS PRÁCTICAS
-* Las entradas deben estar normalizadas. Es recomendable pre-procesar las entradas según la función de activación utilizada.
+* Las entradas deben estar normalizadas para evitar overflow. Es recomendable que las entradas posean un valor entre 0 y 1.
 * Las salidas utilizadas durante el entrenamiento deben estar dentro del codominio de la función de activación. Por lo tanto deben ser pre-procesadas. Adicionalmente, las salidas de la red deben ser post-procesadas de manera inversa al pre-procesamiento del entrenamiento.
 * Es recomendable utilizar la misma cantidad de neuronas en la primer capa que de entradas a la red.
 * Los datasets deben ser entrenados de manera completa. Cada vez que se recorre un dataset se llama época. Una baja cantidad de épocas provoca underfitting y una alta cantidad de épocas puede provocar overfitting.

@@ -21,7 +21,7 @@ class Tanh:
 class Relu:
 	
 	def evaluar(self, x):
-		return np.where(x > 0, x, 0)
+		return np.matrix(np.where(x > 0, x, 0))
 	
 	def derivada(self, x):
 		return np.where(x > 0, 1, 0)
@@ -32,7 +32,7 @@ class LeakyRelu:
 		self.a = coeficiente
 	
 	def evaluar(self, x):
-		return np.where(x > 0, self.a * x, 0)
+		return np.matrix(np.where(x > 0, self.a * x, 0))
 	
 	def derivada(self, x):
 		return np.where(x > 0, self.a, 0)
